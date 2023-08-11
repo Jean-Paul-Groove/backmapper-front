@@ -8,12 +8,13 @@ form {
   flex-direction: column;
   margin-top: 2vw;
 }
-.add-step-button {
+.add-step-button,
+.add-pin-button {
   font: inherit;
   cursor: pointer;
   font-size: 2vw;
   color: white;
-  background: none;
+  background: rgba(0, 0, 0, 0.496);
   border: 0.5px solid white;
   padding: 0.5vw;
   width: fit-content;
@@ -21,9 +22,14 @@ form {
   border-radius: 0.5vw;
   transition: transform 100ms ease-in-out;
 }
+.add-pin-button {
+  margin-top: 0;
+  font-size: 1.5vw;
+}
 label {
   font-weight: 700;
   font-size: 1.5vw;
+  margin-bottom: 1vw;
 }
 input,
 select,
@@ -40,6 +46,16 @@ input:focus-visible {
 .add-step-button:hover {
   box-shadow: 0 0 10px white;
   transform: scale(1.08);
+}
+.add-step-button:disabled {
+  color: rgba(0, 0, 0, 0.416);
+  background-color: rgba(255, 255, 255, 0.271);
+  border: none;
+  cursor: default;
+  &:hover {
+    box-shadow: none;
+    transform: none;
+  }
 }
 .goBack {
   font-size: 3vw;

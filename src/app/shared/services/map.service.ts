@@ -59,6 +59,8 @@ export class MapService {
   defaultView: { center: Coordinates } = {
     center: [15, 50],
   };
+  source = new VectorSource();
+
   private _baseLayer$ = new BehaviorSubject<BaseLayer>(
     this.provideLayer('StamenToner')
   );
@@ -76,6 +78,19 @@ export class MapService {
   private _loading$ = new BehaviorSubject<boolean>(false);
   get loading$(): Observable<boolean> {
     return this._loading$.asObservable();
+  }
+  private _newPinCoordinates$ = new BehaviorSubject<Coordinates | undefined>(
+    undefined
+  );
+  get newPinCoordinates$(): Observable<Coordinates | undefined> {
+    return this._newPinCoordinates$.asObservable();
+  }
+
+  private _drawingForTrip$ = new BehaviorSubject<undefined | BaseLayer>(
+    undefined
+  );
+  get drawingForTrip$(): Observable<undefined | BaseLayer> {
+    return this._drawingForTrip$.asObservable();
   }
 
   private _tripLayersOnMap$ = new BehaviorSubject<BaseLayer[]>([]);
@@ -140,13 +155,38 @@ export class MapService {
   setNewTripLayers(trips: Trip[]) {
     const updatedTripLayers: BaseLayer[] = [];
     trips.forEach((trip) => {
-      const features = this.addStepsFeatures(trip);
-      const tripLayer = this.generateLayerFromFeatures(trip, features);
-      updatedTripLayers.push(tripLayer);
+      if (trip.steps.length > 0) {
+        const features = this.addStepsFeatures(trip);
+        const tripLayer = this.generateLayerFromFeatures(trip, features);
+        updatedTripLayers.push(tripLayer);
+      }
     });
     this._tripLayersOnMap$.next(updatedTripLayers);
   }
   defineCenterOfMap(coordinates: Coordinates, zoom: number = 4) {
     this._view$.next({ center: coordinates, zoom: zoom });
+  }
+  drawOnMap(trip: Trip) {
+    const vector = new VectorLayer({
+      source: this.source,
+      style: new Style({
+        image: new Icon({
+          src: `../../../../assets/pin-${trip.color}.png`,
+          anchor: [0.5, 1],
+        }),
+      }),
+    });
+
+    this._drawingForTrip$.next(vector);
+  }
+  stopDrowOnMap() {
+    this._drawingForTrip$.next(undefined);
+  }
+  setNewPinCoordinates(coordinates: Coordinates) {
+    this._newPinCoordinates$.next(coordinates);
+  }
+  resetNewStepPin() {
+    this._newPinCoordinates$.next(undefined);
+    this.source.clear();
   }
 }

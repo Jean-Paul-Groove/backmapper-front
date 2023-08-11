@@ -16,5 +16,11 @@
       </option>
     </select>
   </div>
-  <button class="add-button" (click)="onAddTrip()">Ajouter</button>
+  <button
+    class="add-button"
+    (click)="onAddTrip()"
+    [disabled]="!tripFormGroup.valid"
+  >
+    Ajouter
+  </button>
 </form>

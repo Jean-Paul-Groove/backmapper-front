@@ -23,7 +23,7 @@ form {
   cursor: pointer;
   font-size: 2vw;
   color: white;
-  background: none;
+  background: rgba(0, 0, 0, 0.496);
   border: 0.5px solid white;
   padding: 0.5vw;
   width: fit-content;
@@ -31,6 +31,17 @@ form {
   border-radius: 0.5vw;
   transition: transform 100ms ease-in-out;
 }
+.add-button:disabled {
+  color: rgba(0, 0, 0, 0.416);
+  background-color: rgba(255, 255, 255, 0.271);
+  border: none;
+  cursor: default;
+  &:hover {
+    box-shadow: none;
+    transform: none;
+  }
+}
+
 label {
   font-weight: 700;
   font-size: 1.5vw;

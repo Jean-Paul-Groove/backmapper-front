@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Trip } from '../models/trip.model';
 import { Observable, of } from 'rxjs';
+import { Coordinates } from '../models/coordinates.model';
+import { Step } from '../models/step.model';
 
 @Injectable({
   providedIn: 'root',
@@ -178,11 +180,33 @@ export class TripService {
     const lastId = this.dummyTrips.sort((a, b) => a.id - b.id)[
       this.dummyTrips.length - 1
     ].id;
-    console.log(lastId);
     this.dummyTrips.push({ ...trip, id: lastId + 1 });
     return lastId + 1;
   }
   getOneTripById(id: number) {
-    return this.dummyTrips.filter((trip) => trip.id === id)[0];
+    const trip = this.dummyTrips.filter((trip) => trip.id === id)[0];
+    return trip ? trip : false;
+  }
+  addAStepToATrip(
+    stepContent: {
+      title: string;
+      description: string;
+      coordinates: Coordinates;
+      date: string;
+    },
+    tripId: number
+  ) {
+    const trip = this.getOneTripById(tripId);
+    if (!trip) {
+      return;
+    }
+    const lastStepId = trip.steps[0]
+      ? trip.steps.sort((a, b) => a.id - b.id)[trip.steps.length - 1].id
+      : 0;
+    const newStep: Step = {
+      ...stepContent,
+      id: lastStepId + 1,
+    };
+    trip.steps.push(newStep);
   }
 }

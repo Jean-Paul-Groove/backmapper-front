@@ -2,12 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import * as olProj from 'ol/proj';
-import { Observable, combineLatest, map, skip, tap } from 'rxjs';
-import { TripService } from 'src/app/shared/services/trip.service';
+import {
+  Observable,
+  combineLatest,
+  map,
+  skip,
+  take,
+  takeUntil,
+  takeWhile,
+  tap,
+} from 'rxjs';
 import BaseLayer from 'ol/layer/Base';
 import { MapService } from 'src/app/shared/services/map.service';
 import { Coordinates } from 'src/app/shared/models/coordinates.model';
-import { Collection } from 'ol';
+import { Draw, Modify } from 'ol/interaction.js';
+import { Point } from 'ol/geom';
 
 @Component({
   selector: 'app-map',
@@ -19,23 +28,23 @@ export class MapComponent implements OnInit {
   baseLayer$!: Observable<BaseLayer>;
   tripLayers$!: Observable<BaseLayer[]>;
   view$!: Observable<{ center: Coordinates; zoom: number }>;
+  drawingForTrip$!: Observable<undefined | BaseLayer>;
 
-  constructor(
-    private tripService: TripService,
-    private mapService: MapService
-  ) {}
+  constructor(private mapService: MapService) {}
 
   ngOnInit(): void {
     this.initializeObservables();
     this.initializeMap();
-    this.displayTrips();
+    this.combineLayers();
     this.centerMap();
+    this.drawOnMap();
   }
 
   private initializeObservables() {
     this.baseLayer$ = this.mapService.baseLayer$;
     this.tripLayers$ = this.mapService.tripLayersOnMap$;
     this.view$ = this.mapService.view$;
+    this.drawingForTrip$ = this.mapService.drawingForTrip$;
   }
 
   private initializeMap() {
@@ -50,10 +59,14 @@ export class MapComponent implements OnInit {
     });
   }
 
-  private displayTrips() {
-    combineLatest([this.baseLayer$, this.tripLayers$])
+  private combineLayers() {
+    combineLatest([this.baseLayer$, this.tripLayers$, this.drawingForTrip$])
       .pipe(
-        map(([baseLayer, tripLayer]) => [baseLayer, ...tripLayer]),
+        map(([baseLayer, tripLayer, drawingForTrip]) =>
+          drawingForTrip
+            ? [baseLayer, ...tripLayer, drawingForTrip]
+            : [baseLayer, ...tripLayer]
+        ),
         tap((layers) => {
           this.map.setLayers(layers);
         })
@@ -78,48 +91,30 @@ export class MapComponent implements OnInit {
       )
       .subscribe();
   }
-  /* private addTripMarkersToLayerGroup(trip: Trip) {
-    const stepsCoordinates = trip.steps.map((step) => step.coordinates);
-    const stepsFeatures = stepsCoordinates.map(
-      (coordinates) =>
-        new Feature({
-          geometry: new Point(olProj.fromLonLat(coordinates)),
+
+  private drawOnMap() {
+    this.drawingForTrip$
+      .pipe(
+        tap((drawingForTrip) => {
+          if (drawingForTrip) {
+            const draw = new Draw({
+              source: this.mapService.source,
+              type: 'Point',
+            });
+            draw.once('drawend', (evt) => {
+              this.map.removeInteraction(draw);
+              this.mapService.source.clear();
+              const p = evt.feature.getGeometry() as Point;
+              const coordinates = olProj.toLonLat(
+                p.getCoordinates()
+              ) as Coordinates;
+
+              this.mapService.setNewPinCoordinates(coordinates);
+            });
+            this.map.addInteraction(draw);
+          }
         })
-    );
-    const lineFeatures: Feature[] = [];
-    [...stepsCoordinates]
-      .map((coordinate) => olProj.fromLonLat(coordinate))
-      .reduce((previousValue, currentValue, index) => {
-        if (index == 0) {
-          return currentValue;
-        }
-        const feature = new Feature({
-          geometry: new LineString([previousValue, currentValue]),
-          name: 'Line',
-        });
-        lineFeatures.push(feature);
-        return currentValue;
-      });
-
-    const tripLayer = new VectorLayer({
-      source: new VectorSource({
-        features: [...stepsFeatures, ...lineFeatures],
-      }),
-      style: new Style({
-        image: new Icon({
-          src: trip.color
-            ? `../../../../assets/pin-${trip.color}.png`
-            : '../../../../assets/pin-green.png',
-          anchor: [0.5, 1],
-        }),
-        stroke: new Stroke({
-          color: trip.color ? TripColor[trip.color] : 'green',
-          width: 4,
-          lineDash: [4, 20],
-        }),
-      }),
-    });
-
-    this.layerCollection.push(tripLayer);
-  } */
+      )
+      .subscribe();
+  }
 }
