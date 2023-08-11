@@ -1,1 +1,61 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: "flix";
+  src: url("./assets/Flix-Normal.ttf");
+}
+@font-face {
+  font-family: "flix outline";
+  src: url("./assets/Flix-Outline.ttf");
+}
+@font-face {
+  font-family: wasted;
+  src: url("./assets/WastedPersonalUseRegular-WyegG.ttf");
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  height: 100vh;
+  width: 100vw;
+  background: url("./assets/pexels-stefan-stefancik-91228.webp");
+  background-size: cover;
+}
+h2 {
+  font-family: "flix";
+}
+//Le style des éléments de la carte ne peut pas être injecté dans le composant map car ils sont créés par OpenLayers en dehors du composant
+.ol-zoom,
+.ol-rotate {
+  position: absolute;
+  right: 5%;
+  padding: 0.5vw;
+  border-radius: 1vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background-color: rgba(0, 0, 0, 0.44);
+}
+.ol-zoom {
+  top: 30%;
+  height: 12%;
+}
+.ol-rotate {
+  top: 45%;
+}
+.ol-attribution {
+  position: absolute;
+  bottom: 3.8%;
+  color: white;
+  font-family: "work sans";
+  font-weight: 500;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.718);
+  padding: 0.2vw;
+  & a {
+    color: white;
+  }
+  & button {
+    display: none;
+  }
+}

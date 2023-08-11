@@ -1,10 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { TravelLogComponent } from './travel-log/components/travel-log/travel-log.component';
+import { SingleTripComponent } from './travel-log/components/single-trip/single-trip.component';
+import { NewTripComponent } from './travel-log/components/new-trip/new-trip.component';
+import { NewStepComponent } from './travel-log/components/new-step/new-step.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: 'trips', component: TravelLogComponent },
+  { path: 'trips/new', component: NewTripComponent },
+  { path: 'trips/:id/new-step', component: NewStepComponent },
+  { path: 'trips/:id', component: SingleTripComponent },
+  { path: '', pathMatch: 'full', redirectTo: 'trips' },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

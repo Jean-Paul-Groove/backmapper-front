@@ -1,0 +1,41 @@
+ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+li {
+  list-style: none;
+  margin-top: 1.5vw;
+  width: 100%;
+}
+li button {
+  padding: 5%;
+  width: 100%;
+  border-radius: 1vw;
+  text-align: center;
+  background-color: rgba(133, 133, 133, 0.436);
+  box-shadow: 0 0 3px white;
+}
+li button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px white;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+  color: white;
+  background: none;
+  border: none;
+}
+li .add-a-trip {
+  width: 5vw;
+  aspect-ratio: 1;
+  font-size: 3.5vw;
+  padding: 0.5vw;
+  border-radius: 100%;
+}
+.add-a-trip-li {
+  width: fit-content;
+}

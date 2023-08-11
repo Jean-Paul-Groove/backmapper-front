@@ -1,0 +1,38 @@
+.trip-header {
+  display: grid;
+  grid-template-columns: 40% 48%;
+  padding: 1vw;
+  h3 {
+    text-align: center;
+  }
+}
+button {
+  font-size: 3vw;
+  text-align: left;
+  cursor: pointer;
+  color: white;
+  background: none;
+  border: none;
+}
+.add-a-step-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.add-a-step {
+  width: 5vw;
+  text-align: center;
+  font-size: 2.5vw;
+  aspect-ratio: 1;
+  padding: 0.5vw;
+  border-radius: 100%;
+  margin: 2vw;
+  box-shadow: 0 0 5px white;
+  transition: all 100ms ease-in-out;
+  background-color: rgba(133, 133, 133, 0.436);
+}
+.add-a-step:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 10px white;
+}

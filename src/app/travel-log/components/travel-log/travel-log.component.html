@@ -1,0 +1,11 @@
+<h2 class="trip-list-title">Tous vos voyages:</h2>
+<ul class="tripList">
+  <li *ngFor="let trip of trips$ | async">
+    <button (click)="onTripSelection(trip)">
+      <h3>{{ trip.title | titlecase }}</h3>
+    </button>
+  </li>
+  <li class="add-a-trip-li">
+    <button class="add-a-trip" (click)="onAddATrip()">+</button>
+  </li>
+</ul>

@@ -1,0 +1,20 @@
+<button class="goBack" (click)="onGoBackToTrip()">←</button>
+<form action="">
+  <div class="form-field">
+    <label for="title">Titre de l'étape</label>
+    <input type="text" id="titre" [formControl]="titleCtrl" />
+  </div>
+  <div class="form-field">
+    <label for="date">Date</label>
+    <input type="date" name="date" id="date" [formControl]="dateCtrl" />
+  </div>
+  <div class="form-field">
+    <label for="description">Raconte nous:</label>
+    <textarea
+      name="description"
+      id="description"
+      [formControl]="descriptionCtrl"
+    ></textarea>
+  </div>
+  <button (click)="onAddAStep()" class="add-step-button">Ajouter</button>
+</form>

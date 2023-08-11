@@ -1,0 +1,14 @@
+<div class="trip-header">
+  <button (click)="onGoBackToTripList()">←</button>
+  <h2>{{ trip.title | titlecase }}</h2>
+</div>
+
+<app-step
+  *ngFor="let step of trip.steps; index as i"
+  [step]="step"
+  [stepNumber]="i + 1"
+></app-step>
+<div class="add-a-step-container">
+  <p>Ajouter une étape:</p>
+  <button class="add-a-step" (click)="onAddAStep()">+</button>
+</div>

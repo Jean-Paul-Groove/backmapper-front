@@ -1,0 +1,13 @@
+<div *ngIf="step" class="travel-step" (click)="onClick()">
+  <h3>{{ step.title }}</h3>
+  <p class="step-date">
+    Etape {{ stepNumber }} le {{ step.date | date : "dd/MM/YYYY" }}
+  </p>
+  <p>{{ step.description }}</p>
+  <img
+    class="travel-step-img"
+    *ngFor="let pictureUrl of step.pitcures"
+    [src]="pictureUrl"
+    [alt]="step.title"
+  />
+</div>

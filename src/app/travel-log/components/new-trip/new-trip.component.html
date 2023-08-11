@@ -1,0 +1,20 @@
+<form action="">
+  <button class="goBack" (click)="onGoBackToTripList()">←</button>
+  <div class="form-field">
+    <label for="title">Titre</label>
+    <input type="text" id="titre" [formControl]="titleCtrl" class="title" />
+  </div>
+  <div class="form-field">
+    <label for="date">Date de début</label>
+    <input type="date" name="date" id="date" [formControl]="dateCtrl" />
+  </div>
+  <div class="form-field">
+    <label for="color">Couleur du voyage</label>
+    <select name="color" id="color" [formControl]="colorCtrl">
+      <option *ngFor="let color of tripColorDictionary" [value]="color">
+        {{ color | titlecase }}
+      </option>
+    </select>
+  </div>
+  <button class="add-button" (click)="onAddTrip()">Ajouter</button>
+</form>

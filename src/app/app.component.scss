@@ -1,0 +1,52 @@
+.app {
+  overflow: hidden;
+  border-radius: 3vw;
+  position: absolute;
+  display: grid;
+  grid-template-columns: 69% 29%;
+  column-gap: 2vw;
+  row-gap: 0.5vw;
+  grid-template-rows: 89% 10%;
+  left: 5%;
+  top: 5%;
+  height: 90%;
+  width: 90%;
+  padding: 1vw;
+  border: 1px rgba(178, 178, 178, 0.618) solid;
+  background: linear-gradient(
+    162deg,
+    rgba(0, 0, 0, 0.492) 0%,
+    rgba(78, 78, 78, 0.699) 87%
+  );
+}
+
+h1 {
+  width: 100%;
+  text-align: center;
+  color: rgb(229, 229, 229);
+  background-color: rgba(0, 0, 0, 0.764);
+  font-family: "flix outline";
+  font-size: 3vw;
+  padding: 0.5vw 3vw;
+  position: absolute;
+  top: 0;
+  border: 1px rgba(178, 178, 178, 0.618) solid;
+  z-index: 2;
+  letter-spacing: 0.5rem;
+}
+.map-container {
+  overflow: hidden;
+  position: relative;
+  border-radius: 1vw;
+  border: 1px rgba(178, 178, 178, 0.618) solid;
+}
+.wrapper {
+  color: white;
+  font-family: "work sans";
+  background-color: rgba(0, 0, 0, 0.436);
+  height: 100%;
+  padding: 1vw;
+  border-radius: 1vw;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

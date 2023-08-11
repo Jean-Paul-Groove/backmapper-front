@@ -1,0 +1,55 @@
+form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1vw;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2vw;
+}
+.goBack {
+  font-size: 3vw;
+  text-align: left;
+  cursor: pointer;
+  color: white;
+  background: none;
+  border: none;
+  align-self: left;
+}
+.add-button {
+  font: inherit;
+  cursor: pointer;
+  font-size: 2vw;
+  color: white;
+  background: none;
+  border: 0.5px solid white;
+  padding: 0.5vw;
+  width: fit-content;
+  margin: 2vw auto;
+  border-radius: 0.5vw;
+  transition: transform 100ms ease-in-out;
+}
+label {
+  font-weight: 700;
+  font-size: 1.5vw;
+}
+input,
+select {
+  padding: 0.5vw;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.899);
+  font-size: 1.5vw;
+}
+input:focus-visible {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.882);
+  outline: none;
+}
+.title {
+  font-family: "flix";
+}
+.add-button:hover {
+  box-shadow: 0 0 10px white;
+  transform: scale(1.08);
+}
