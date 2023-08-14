@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import * as olProj from 'ol/proj';
@@ -17,11 +17,13 @@ import { MapService } from 'src/app/shared/services/map.service';
 import { Coordinates } from 'src/app/shared/models/coordinates.model';
 import { Draw, Modify } from 'ol/interaction.js';
 import { Point } from 'ol/geom';
+import { defaults } from 'ol/control/defaults';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapComponent implements OnInit {
   map!: Map;
@@ -29,17 +31,31 @@ export class MapComponent implements OnInit {
   tripLayers$!: Observable<BaseLayer[]>;
   view$!: Observable<{ center: Coordinates; zoom: number }>;
   drawingForTrip$!: Observable<undefined | BaseLayer>;
+  mapElement!: HTMLElement;
+  mapWidthInPx!: number;
+  mapRightPadding!: number;
 
   constructor(private mapService: MapService) {}
 
   ngOnInit(): void {
     this.initializeObservables();
+    this.initializeMapwidthAndPadding();
     this.initializeMap();
     this.combineLayers();
     this.centerMap();
     this.drawOnMap();
   }
-
+  private initializeMapwidthAndPadding() {
+    const element = document.getElementById('map-root');
+    if (element) {
+      this.mapElement = document.getElementById('map-root') as HTMLElement;
+      this.mapWidthInPx = +window
+        .getComputedStyle(this.mapElement)
+        .width.split('px')[0];
+      console.log('Mapwidth = ' + this.mapWidthInPx);
+      this.mapRightPadding = this.mapWidthInPx * 0.3;
+    }
+  }
   private initializeObservables() {
     this.baseLayer$ = this.mapService.baseLayer$;
     this.tripLayers$ = this.mapService.tripLayersOnMap$;
@@ -55,7 +71,9 @@ export class MapComponent implements OnInit {
       view: new View({
         center: olProj.fromLonLat(defaultView.center),
         zoom: 2,
+        padding: [0, this.mapRightPadding, 0, 0],
       }),
+      controls: defaults({ rotate: false }),
     });
   }
 
@@ -84,8 +102,14 @@ export class MapComponent implements OnInit {
           this.map
             .getView()
             .animate(
-              { center: view.center, duration: 500 },
-              { zoom: view.zoom, duration: 1000 }
+              {
+                center: view.center,
+                duration: this.mapService.mapAnimationDuration,
+              },
+              {
+                zoom: view.zoom,
+                duration: this.mapService.mapAnimationDuration,
+              }
             );
         })
       )
@@ -96,11 +120,11 @@ export class MapComponent implements OnInit {
     this.drawingForTrip$
       .pipe(
         tap((drawingForTrip) => {
+          const draw = new Draw({
+            source: this.mapService.source,
+            type: 'Point',
+          });
           if (drawingForTrip) {
-            const draw = new Draw({
-              source: this.mapService.source,
-              type: 'Point',
-            });
             draw.once('drawend', (evt) => {
               this.map.removeInteraction(draw);
               this.mapService.source.clear();
@@ -112,6 +136,9 @@ export class MapComponent implements OnInit {
               this.mapService.setNewPinCoordinates(coordinates);
             });
             this.map.addInteraction(draw);
+          } else {
+            draw.abortDrawing();
+            this.map.removeInteraction(draw);
           }
         })
       )

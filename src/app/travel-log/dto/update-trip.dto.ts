@@ -1,9 +1,6 @@
-import { Step } from './step.model';
-
-export class Trip {
+export class UpdateTripDto {
   id!: number;
   title!: string;
-  startDate!: string;
-  steps!: Step[];
+  createdDate!: string;
   color!: 'vert' | 'azur' | 'bleu' | 'rose' | 'violet' | 'rouge' | 'jaune';
 }

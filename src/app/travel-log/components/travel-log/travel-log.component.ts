@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, take, tap } from 'rxjs';
+import { TripColor } from 'src/app/shared/enum/trip-color.enum';
 import { Trip } from 'src/app/shared/models/trip.model';
 import { MapService } from 'src/app/shared/services/map.service';
 import { TripService } from 'src/app/shared/services/trip.service';
@@ -9,10 +10,12 @@ import { TripService } from 'src/app/shared/services/trip.service';
   selector: 'app-travel-log',
   templateUrl: './travel-log.component.html',
   styleUrls: ['./travel-log.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TravelLogComponent implements OnInit {
   trips$!: Observable<Trip[]>;
   tripDisplayed: undefined | Trip = undefined;
+  tripColor = TripColor;
 
   constructor(
     private tripService: TripService,
@@ -39,7 +42,10 @@ export class TravelLogComponent implements OnInit {
         take(1),
         tap((trips) => {
           this.mapService.setNewTripLayers(trips);
-          this.mapService.defineCenterOfMap(this.mapService.defaultView.center);
+          this.mapService.defineCenterOfMap(
+            this.mapService.defaultView.center,
+            2
+          );
         })
       )
       .subscribe();

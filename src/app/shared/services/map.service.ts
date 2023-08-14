@@ -15,11 +15,19 @@ import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
 import { TripColor } from '../enum/trip-color.enum';
 import { Coordinates } from '../models/coordinates.model';
+import { TripService } from './trip.service';
+import { Step } from '../models/step.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MapService {
+  constructor(private tripService: TripService) {}
+
+  //Déclarations des variables liées au paramétrage de la carte
+  mapAnimationDuration = 1500;
+  source = new VectorSource();
+  private tripLines: [width: number, spacing: number] = [10, 10];
   private baseLayersDictionary = [
     { name: 'OSMStandard', value: new TileLayer({ source: new OSM() }) },
     {
@@ -59,8 +67,9 @@ export class MapService {
   defaultView: { center: Coordinates } = {
     center: [15, 50],
   };
-  source = new VectorSource();
+  private mapIsAlreadyCentering = false;
 
+  //Déclaration des béhaviour subjects pour le reactive state management
   private _baseLayer$ = new BehaviorSubject<BaseLayer>(
     this.provideLayer('StamenToner')
   );
@@ -73,11 +82,6 @@ export class MapService {
   });
   get view$(): Observable<{ center: Coordinates; zoom: number }> {
     return this._view$.asObservable();
-  }
-
-  private _loading$ = new BehaviorSubject<boolean>(false);
-  get loading$(): Observable<boolean> {
-    return this._loading$.asObservable();
   }
   private _newPinCoordinates$ = new BehaviorSubject<Coordinates | undefined>(
     undefined
@@ -97,7 +101,12 @@ export class MapService {
   get tripLayersOnMap$(): Observable<BaseLayer[]> {
     return this._tripLayersOnMap$.asObservable();
   }
+  private _loading$ = new BehaviorSubject<boolean>(false);
+  get loading$(): Observable<boolean> {
+    return this._loading$.asObservable();
+  }
 
+  //Déclaration de méthodes propres au service
   private provideLayer(layerName: string) {
     return this.baseLayersDictionary
       .filter((layer) => layer.name === layerName)
@@ -105,7 +114,16 @@ export class MapService {
   }
 
   private addStepsFeatures(trip: Trip): Feature[] {
-    const stepsCoordinates = trip.steps.map((step) => step.coordinates);
+    const sortedTripSteps =
+      trip.steps.length > 1
+        ? trip.steps.sort((a, b) => +a.date - +b.date)
+        : trip.steps;
+    const stepsCoordinates = sortedTripSteps.map((step) =>
+      this.tripService.transformCoordinateStringToArrayOfNumber(
+        step.coordinates
+      )
+    );
+
     const stepsFeatures = stepsCoordinates.map(
       (coordinates) =>
         new Feature({
@@ -134,7 +152,7 @@ export class MapService {
   ): BaseLayer {
     const tripLayer = new VectorLayer({
       source: new VectorSource({
-        features: this.addStepsFeatures(trip),
+        features: features,
       }),
       style: new Style({
         image: new Icon({
@@ -144,34 +162,78 @@ export class MapService {
           anchor: [0.5, 1],
         }),
         stroke: new Stroke({
-          color: trip.color ? TripColor[trip.color] : 'vert',
+          color: trip.color ? TripColor[trip.color] : 'green',
           width: 4,
-          lineDash: [4, 20],
+          lineDash: this.tripLines,
         }),
       }),
     });
     return tripLayer;
   }
+
+  //Déclaration de méthodes destinées aux autres composants pour intéragir avec la carte
   setNewTripLayers(trips: Trip[]) {
     const updatedTripLayers: BaseLayer[] = [];
-    trips.forEach((trip) => {
+    for (const trip of trips) {
       if (trip.steps.length > 0) {
         const features = this.addStepsFeatures(trip);
         const tripLayer = this.generateLayerFromFeatures(trip, features);
         updatedTripLayers.push(tripLayer);
       }
-    });
+    }
     this._tripLayersOnMap$.next(updatedTripLayers);
   }
-  defineCenterOfMap(coordinates: Coordinates, zoom: number = 4) {
-    this._view$.next({ center: coordinates, zoom: zoom });
+  setSinglePin(step: Step, tripColor: string) {
+    const feature = new Feature({
+      geometry: new Point(
+        olProj.fromLonLat(
+          this.tripService.transformCoordinateStringToArrayOfNumber(
+            step.coordinates
+          )
+        )
+      ),
+    });
+    this.source.addFeature(feature);
+    const pinLayer = new VectorLayer({
+      source: this.source,
+      style: new Style({
+        image: new Icon({
+          src: tripColor
+            ? `../../../../assets/pin-${tripColor}.png`
+            : '../../../../assets/pin-green.png',
+          anchor: [0.5, 1],
+        }),
+      }),
+    });
   }
-  drawOnMap(trip: Trip) {
+
+  defineCenterOfMap(coordinates: Coordinates, zoom: number = 4) {
+    if (this.mapIsAlreadyCentering) {
+      return;
+    }
+    const actualView = this._view$.getValue();
+    if (
+      actualView.center[0] === coordinates[0] &&
+      actualView.center[1] === coordinates[1] &&
+      actualView.zoom == zoom
+    ) {
+      return;
+    } else {
+      setTimeout(() => {
+        this.mapIsAlreadyCentering = false;
+      }, this.mapAnimationDuration);
+
+      this._view$.next({ center: coordinates, zoom: zoom });
+      this.mapIsAlreadyCentering = true;
+    }
+  }
+
+  drawOnMap(tripColor: string) {
     const vector = new VectorLayer({
       source: this.source,
       style: new Style({
         image: new Icon({
-          src: `../../../../assets/pin-${trip.color}.png`,
+          src: `../../../../assets/pin-${tripColor}.png`,
           anchor: [0.5, 1],
         }),
       }),
@@ -187,6 +249,7 @@ export class MapService {
   }
   resetNewStepPin() {
     this._newPinCoordinates$.next(undefined);
-    this.source.clear();
+    this.stopDrowOnMap();
+    this.source = new VectorSource();
   }
 }

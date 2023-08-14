@@ -29,10 +29,11 @@ button {
   border-radius: 100%;
   margin: 2vw;
   box-shadow: 0 0 5px white;
-  transition: all 100ms ease-in-out;
+
   background-color: rgba(133, 133, 133, 0.436);
+  box-shadow: 0 0 3px white;
 }
 .add-a-step:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 10px white;
+  transform: translate(1px, 1px);
+  box-shadow: none;
 }

@@ -6,6 +6,7 @@ import { SingleTripComponent } from './components/single-trip/single-trip.compon
 import { NewTripComponent } from './components/new-trip/new-trip.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NewStepComponent } from './components/new-step/new-step.component';
+import { UpdateStepComponent } from './components/update-step/update-step.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { NewStepComponent } from './components/new-step/new-step.component';
     SingleTripComponent,
     NewTripComponent,
     NewStepComponent,
+    UpdateStepComponent,
   ],
   imports: [CommonModule, ReactiveFormsModule],
   exports: [

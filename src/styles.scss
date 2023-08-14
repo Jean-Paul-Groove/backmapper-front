@@ -25,33 +25,49 @@ h2 {
   font-family: "flix";
 }
 //Le style des éléments de la carte ne peut pas être injecté dans le composant map car ils sont créés par OpenLayers en dehors du composant
-.ol-zoom,
-.ol-rotate {
+.ol-zoom {
   position: absolute;
-  right: 5%;
+  right: 30%;
+  top: 45%;
+  height: 12%;
   padding: 0.5vw;
-  border-radius: 1vw;
+  border-radius: 0.5vw;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  background-color: rgba(0, 0, 0, 0.44);
+  background-color: rgba(0, 0, 0, 0.659);
+  backdrop-filter: blur(10px);
+  border-left: 1px rgba(178, 178, 178, 0.618) solid;
+  border-top: 1px rgba(178, 178, 178, 0.618) solid;
+  border-bottom: 1px rgba(178, 178, 178, 0.618) solid;
+  button {
+    color: white;
+    border: none;
+    background-color: black;
+    padding: 0.5vw;
+    border-radius: 0.5vw;
+    cursor: pointer;
+    &:hover {
+      box-shadow: 0 0 1px white;
+    }
+  }
 }
-.ol-zoom {
-  top: 30%;
-  height: 12%;
-}
-.ol-rotate {
-  top: 45%;
-}
+
 .ol-attribution {
   position: absolute;
-  bottom: 3.8%;
+  bottom: 0%;
   color: white;
   font-family: "work sans";
   font-weight: 500;
-  right: 0;
+  left: 0;
+  width: 71%;
   background-color: rgba(0, 0, 0, 0.718);
-  padding: 0.2vw;
+  padding-left: 1vw;
+  padding-bottom: 1vw;
+  backdrop-filter: blur(10px);
+  border-top: 1px rgba(178, 178, 178, 0.618) solid;
   & a {
     color: white;
   }

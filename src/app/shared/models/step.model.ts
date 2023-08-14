@@ -1,8 +1,8 @@
 export class Step {
   id!: number;
   title!: string;
-  coordinates!: [longitude: number, latitude: number];
+  coordinates!: string;
   description?: string;
-  pitcures?: string[];
+  pictures?: string;
   date!: string;
 }

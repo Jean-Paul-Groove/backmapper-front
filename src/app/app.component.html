@@ -3,5 +3,14 @@
     <h1>Backmapper</h1>
     <app-map></app-map>
   </div>
-  <div class="wrapper"><router-outlet></router-outlet></div>
+
+  <div class="wrapper" [class.extended]="wrapperExtended">
+    <button
+      class="extend-button"
+      [class.reduce-button]="wrapperExtended"
+      (click)="toggleExtendWrapper()"
+    >
+      {{ "<" }}</button
+    ><router-outlet></router-outlet>
+  </div>
 </div>

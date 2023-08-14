@@ -24,12 +24,12 @@ form {
   transition: transform 100ms ease-in-out;
 }
 .add-pin-button {
-  margin-top: 0;
+  margin-top: 0.5vw;
   font-size: 1.5vw;
 }
 label {
   font-weight: 700;
-  font-size: 1.5vw;
+  font-size: 1.7vw;
   margin-bottom: 1vw;
 }
 input,
@@ -39,6 +39,10 @@ textarea {
   color: white;
   background-color: rgba(0, 0, 0, 0.899);
   font-size: 1.5vw;
+  max-width: 100%;
+}
+textarea {
+  min-height: 30vh;
 }
 input:focus-visible {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.882);
@@ -84,4 +88,7 @@ input:focus-visible {
 .upload-img-input {
   border: 1px white solid;
   margin-top: 1vw;
+}
+.toDelete {
+  filter: grayscale(50);
 }

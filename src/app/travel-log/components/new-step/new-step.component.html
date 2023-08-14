@@ -1,11 +1,12 @@
-<button class="goBack" (click)="onGoBackToTrip()">←</button>
 <form action="">
+  <button class="goBack" (click)="onGoBackToTrip()">←</button>
   <div class="form-field">
     <label for="title">Titre de l'étape</label>
     <input type="text" id="title" name="title" [formControl]="titleCtrl" />
   </div>
   <div class="form-field">
     <label for="date">Date</label>
+    <span>{{ dateCtrl.value | date }}</span>
     <input type="date" name="date" id="date" [formControl]="dateCtrl" />
   </div>
   <div class="form-field">
@@ -27,6 +28,33 @@
       Placer sur la carte !
     </button>
   </div>
+  <div class="form-field">
+    <label for="pictures">Ajouter une photo ?</label>
+    <span>Maximum 4: {{ fileList.length }}/4</span>
+    <input
+      class="upload-img-input"
+      type="file"
+      accept="image/*"
+      multiple
+      name="pictures"
+      id="pictures"
+      (change)="onFileSelectionChange($event)"
+      [disabled]="fileList.length == 4"
+    />
+    <div
+      class="upload-img-container"
+      *ngFor="let imgUrl of imgToDisplay; index as i"
+    >
+      <img class="upload-img" [src]="imgUrl" [alt]="fileList[i].name" />
+      <button
+        class="upload-img-close-button"
+        (click)="onDeletePicture($event, i)"
+      >
+        X
+      </button>
+    </div>
+  </div>
+
   <button
     (click)="onAddAStep($event)"
     class="add-step-button"

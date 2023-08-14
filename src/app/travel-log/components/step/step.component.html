@@ -1,13 +1,61 @@
-<div *ngIf="step" class="travel-step" (click)="onClick()">
-  <h3>{{ step.title }}</h3>
-  <p class="step-date">
-    Etape {{ stepNumber }} le {{ step.date | date : "dd/MM/YYYY" }}
-  </p>
-  <p>{{ step.description }}</p>
-  <img
-    class="travel-step-img"
-    *ngFor="let pictureUrl of step.pitcures"
-    [src]="pictureUrl"
-    [alt]="step.title"
-  />
+<div
+  *ngIf="step"
+  class="travel-step"
+  (click)="onClick()"
+  [ngStyle]="{ 'background-color': tripColor }"
+>
+  <ng-container *ngIf="!editModal && !deleteModal; else editStep">
+    <button
+      class="delete-step-button edit-button"
+      aria-label="Supprimer"
+      (click)="onDeleteStep($event)"
+      *ngIf="editbuttonsVisible"
+    >
+      X
+    </button>
+    <button
+      class="edit-step-button edit-button"
+      aria-label="Modifier"
+      (click)="onEditStep($event)"
+      *ngIf="editbuttonsVisible"
+    >
+      Edit
+    </button>
+
+    <h3>{{ step.title }}</h3>
+    <p class="step-date">
+      Etape {{ stepNumber }} le {{ step.date | date : "dd/MM/YYYY" }}
+    </p>
+    <p>{{ step.description }}</p>
+    <ng-container *ngIf="step.pictures"
+      ><img
+        class="travel-step-img"
+        crossorigin="anonymous"
+        *ngFor="let pictureUrl of step.pictures.split(',')"
+        [src]="apiUrl + '/' + pictureUrl"
+        [alt]="step.title" /></ng-container
+  ></ng-container>
+  <ng-template #editStep>
+    <div class="delete-modal" *ngIf="deleteModal; else updateStep">
+      <span>Êtes vous sûr de vouloir supprimer cette étape ?</span>
+      <div class="button-container">
+        <button class="delete-modal-button" (click)="onConfirmDelete($event)">
+          Oui</button
+        ><button
+          class="delete-modal-button non"
+          (click)="onCancelDelete($event)"
+        >
+          Non !
+        </button>
+      </div>
+    </div>
+    <ng-template #updateStep>
+      <app-update-step
+        (goBackToStep)="onCancelEditStep()"
+        (stepIsEdited)="onStepIsEdited()"
+        [step]="step"
+        [tripColor]="tripColor"
+      ></app-update-step
+    ></ng-template>
+  </ng-template>
 </div>

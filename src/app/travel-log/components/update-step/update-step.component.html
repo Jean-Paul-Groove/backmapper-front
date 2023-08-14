@@ -1,0 +1,96 @@
+<form action="">
+  <button class="goBack" (click)="onGoBackToStep($event)">←</button>
+  <div class="form-field">
+    <label for="title">Titre de l'étape</label>
+    <input type="text" id="title" name="title" [formControl]="titleCtrl" />
+  </div>
+  <div class="form-field">
+    <label for="date">Date: {{ dateCtrl.value | date }}</label>
+    <input type="date" name="date" id="date" [formControl]="dateCtrl" />
+  </div>
+  <div class="form-field">
+    <label for="description">Commentaire</label>
+    <textarea
+      name="description"
+      id="description"
+      [formControl]="descriptionCtrl"
+    ></textarea>
+  </div>
+  <div class="form-field">
+    <label for="coordinates">c'était où ?</label>
+    <div>
+      <p *ngIf="newStepCoordinates$ | async as coordinates">
+        Lon: {{ coordinates[0] | number }} Lat: {{ coordinates[1] | number }}
+      </p>
+    </div>
+    <button (click)="onPlacePinOnMap($event)" class="add-pin-button">
+      Placer sur la carte !
+    </button>
+  </div>
+  <div class="form-field">
+    <label for="pictures">Ajouter une photo ?</label>
+    <span>Maximum 4: {{ pictureCount }}/4</span>
+    <input
+      class="upload-img-input"
+      type="file"
+      accept="image/*"
+      multiple
+      name="pictures"
+      id="pictures"
+      (change)="onFileSelectionChange($event)"
+      [disabled]="fileList.length == 4"
+    />
+    <div class="currentPictures">
+      <span>Photos actuelles :</span>
+      <div
+        class="upload-img-container"
+        *ngFor="let picture of currentPictures; index as i"
+      >
+        <img
+          class="upload-img"
+          [class.toDelete]="picturesToDelete.includes(picture)"
+          [src]="apiUrl + '/' + picture"
+          ngClass=""
+        />
+        <button
+          *ngIf="!picturesToDelete.includes(picture); else cancelDelete"
+          class="upload-img-close-button"
+          (click)="onDeleteCurrentPicture($event, i)"
+        >
+          X
+        </button>
+        <ng-template #cancelDelete>
+          <button
+            class="upload-img-close-button"
+            (click)="onCancelDeleteCurrentPicture($event, picture)"
+          >
+            Annuler
+          </button>
+        </ng-template>
+      </div>
+    </div>
+    <ng-container *ngIf="imgToDisplay.length > 0">
+      <span>Nouvelle(s) images :</span>
+      <div
+        class="upload-img-container"
+        *ngFor="let imgUrl of imgToDisplay; index as i"
+      >
+        <img class="upload-img" [src]="imgUrl" [alt]="fileList[i].name" />
+        <button
+          class="upload-img-close-button"
+          (click)="onDeleteUploadPicture($event, i)"
+        >
+          X
+        </button>
+      </div></ng-container
+    >
+  </div>
+
+  <button
+    (click)="onUpdateStep($event)"
+    class="add-step-button"
+    [disabled]="!stepFormGroup.valid"
+  >
+    Modifier !
+  </button>
+</form>

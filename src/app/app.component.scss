@@ -2,29 +2,20 @@
   overflow: hidden;
   border-radius: 3vw;
   position: absolute;
-  display: grid;
-  grid-template-columns: 69% 29%;
-  column-gap: 2vw;
-  row-gap: 0.5vw;
-  grid-template-rows: 89% 10%;
   left: 5%;
   top: 5%;
   height: 90%;
   width: 90%;
-  padding: 1vw;
   border: 1px rgba(178, 178, 178, 0.618) solid;
-  background: linear-gradient(
-    162deg,
-    rgba(0, 0, 0, 0.492) 0%,
-    rgba(78, 78, 78, 0.699) 87%
-  );
 }
 
 h1 {
   width: 100%;
-  text-align: center;
+  text-align: left;
   color: rgb(229, 229, 229);
-  background-color: rgba(0, 0, 0, 0.764);
+  background-color: rgba(0, 0, 0, 0.625);
+  backdrop-filter: blur(10px);
+
   font-family: "flix outline";
   font-size: 3vw;
   padding: 0.5vw 3vw;
@@ -36,17 +27,44 @@ h1 {
 }
 .map-container {
   overflow: hidden;
-  position: relative;
   border-radius: 1vw;
   border: 1px rgba(178, 178, 178, 0.618) solid;
 }
 .wrapper {
   color: white;
   font-family: "work sans";
-  background-color: rgba(0, 0, 0, 0.436);
+  background-color: rgba(0, 0, 0, 0.659);
   height: 100%;
   padding: 1vw;
-  border-radius: 1vw;
+  padding-top: 2vw;
+  border-radius: 0.5vw;
   overflow-y: auto;
   overflow-x: hidden;
+  z-index: 2;
+  backdrop-filter: blur(15px);
+  position: absolute;
+  right: 0;
+  width: 30%;
+  border-left: 1px rgba(178, 178, 178, 0.618) solid;
+  transition: all ease-in-out 200ms;
+}
+.extended {
+  width: 50%;
+}
+.extend-button {
+  position: absolute;
+  background: none;
+  border-bottom-right-radius: 0.5vw;
+  border-top-left-radius: 0.5vw;
+  border-left: none;
+  border-top: none;
+  border: 1px rgba(178, 178, 178, 0.618) solid;
+  padding: 0.2vw 1vw;
+  color: white;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+}
+.reduce-button {
+  transform: rotate(180deg);
 }

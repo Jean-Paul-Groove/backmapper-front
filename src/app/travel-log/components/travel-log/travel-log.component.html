@@ -1,8 +1,14 @@
 <h2 class="trip-list-title">Tous vos voyages:</h2>
 <ul class="tripList">
   <li *ngFor="let trip of trips$ | async">
-    <button (click)="onTripSelection(trip)">
-      <h3>{{ trip.title | titlecase }}</h3>
+    <button
+      (click)="onTripSelection(trip)"
+      *ngIf="trip.color"
+      [ngStyle]="{ 'background-color': tripColor[trip.color] }"
+    >
+      <h3>
+        {{ trip.title | titlecase }}
+      </h3>
     </button>
   </li>
   <li class="add-a-trip-li">

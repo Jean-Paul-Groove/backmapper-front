@@ -1,8 +1,17 @@
 <form action="">
+  <h3>Ajouter un voyage</h3>
   <button class="goBack" (click)="onGoBackToTripList()">←</button>
   <div class="form-field">
     <label for="title">Titre</label>
-    <input type="text" id="titre" [formControl]="titleCtrl" class="title" />
+    <input
+      type="text"
+      id="titre"
+      [formControl]="titleCtrl"
+      class="title"
+      [ngStyle]="{
+        color: colorCtrl.value ? tripColor[colorCtrl.value] : 'white'
+      }"
+    />
   </div>
   <div class="form-field">
     <label for="date">Date de début</label>
@@ -18,7 +27,7 @@
   </div>
   <button
     class="add-button"
-    (click)="onAddTrip()"
+    (click)="onAddTrip($event)"
     [disabled]="!tripFormGroup.valid"
   >
     Ajouter
