@@ -7,6 +7,8 @@ import { NewTripComponent } from './components/new-trip/new-trip.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NewStepComponent } from './components/new-step/new-step.component';
 import { UpdateStepComponent } from './components/update-step/update-step.component';
+import { SharedModule } from '../shared/shared.module';
+import { UpdateTripComponent } from './components/update-trip/update-trip.component';
 
 @NgModule({
   declarations: [
@@ -16,8 +18,9 @@ import { UpdateStepComponent } from './components/update-step/update-step.compon
     NewTripComponent,
     NewStepComponent,
     UpdateStepComponent,
+    UpdateTripComponent,
   ],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SharedModule],
   exports: [
     TravelLogComponent,
     StepComponent,

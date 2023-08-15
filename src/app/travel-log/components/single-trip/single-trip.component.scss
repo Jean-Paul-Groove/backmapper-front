@@ -6,6 +6,26 @@
     text-align: center;
   }
 }
+.trip-info {
+  width: 100%;
+  grid-column-start: span 2;
+}
+.trip-info-line {
+  display: flex;
+  justify-content: space-between;
+  span {
+    font-weight: 600;
+  }
+}
+.edit-trip-button {
+  width: 2vw;
+  height: 2vw;
+  grid-column-start: 2;
+  text-align: right;
+  margin-left: auto;
+  margin-bottom: auto;
+  font-size: inherit;
+}
 button {
   font-size: 3vw;
   text-align: left;

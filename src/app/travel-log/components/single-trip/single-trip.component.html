@@ -1,18 +1,42 @@
 <ng-container *ngIf="trip$ | async as trip"
-  ><div class="trip-header">
+  ><div class="trip-header" *ngIf="editTrip === false">
     <button (click)="onGoBackToTripList()">←</button>
     <h2 [ngStyle]="{ color: tripColor }">{{ trip.title | titlecase }}</h2>
+    <button class="edit-trip-button" (click)="onEditTrip($event)">
+      <app-edit-svg [color]="tripColor"></app-edit-svg>
+    </button>
+    <div class="trip-info" *ngIf="tripInfo">
+      <p class="trip-info-line">
+        Durée:
+        <span>{{ tripInfo.duration / 86400000 | number : "1.0-0" }} jours</span>
+      </p>
+      <p class="trip-info-line">
+        Distance:
+        <span>{{ tripInfo.distance / 1000 | number : "1.0-0" }} km</span>
+      </p>
+      <p class="trip-info-line">
+        Début: <span>{{ tripInfo.startedIn | date }}</span>
+      </p>
+    </div>
   </div>
-
-  <app-step
-    (stepIsModified)="onStepGotModified()"
-    *ngFor="let step of trip.steps; index as i"
-    [step]="step"
-    [stepNumber]="i + 1"
-    [tripColor]="tripColor"
-  ></app-step>
-  <div class="add-a-step-container">
-    <p>Ajouter une étape:</p>
-    <button class="add-a-step" (click)="onAddAStep()">+</button>
-  </div>
+  <ng-container *ngIf="editTrip == false; else editTripFrom"
+    ><app-step
+      (stepIsModified)="onStepGotModified()"
+      *ngFor="let step of trip.steps; index as i"
+      [step]="step"
+      [stepNumber]="i + 1"
+      [tripColor]="tripColor"
+    ></app-step>
+    <div class="add-a-step-container">
+      <p>Ajouter une étape:</p>
+      <button class="add-a-step" (click)="onAddAStep()">+</button>
+    </div></ng-container
+  >
+  <ng-template #editTripFrom>
+    <app-update-trip
+      (backToTrip)="onCancelEdit()"
+      (tripUdated)="onTripGotUpdated()"
+      [trip]="trip"
+    ></app-update-trip>
+  </ng-template>
 </ng-container>

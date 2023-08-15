@@ -27,6 +27,7 @@ export class MapService {
   //Déclarations des variables liées au paramétrage de la carte
   mapAnimationDuration = 1500;
   source = new VectorSource();
+  tripsInfo: { [key: string]: any } = {};
   private tripLines: [width: number, spacing: number] = [10, 10];
   private baseLayersDictionary = [
     { name: 'OSMStandard', value: new TileLayer({ source: new OSM() }) },
@@ -114,6 +115,8 @@ export class MapService {
   }
 
   private addStepsFeatures(trip: Trip): Feature[] {
+    let tripDistance = 0;
+    let tripDurationInMs = 0;
     const sortedTripSteps =
       trip.steps.length > 1
         ? trip.steps.sort((a, b) => +a.date - +b.date)
@@ -124,12 +127,15 @@ export class MapService {
       )
     );
 
+    tripDurationInMs =
+      +sortedTripSteps[sortedTripSteps.length - 1].date - +trip.startDate;
     const stepsFeatures = stepsCoordinates.map(
       (coordinates) =>
         new Feature({
           geometry: new Point(olProj.fromLonLat(coordinates)),
         })
     );
+
     const lineFeatures: Feature[] = [];
     [...stepsCoordinates]
       .map((coordinate) => olProj.fromLonLat(coordinate))
@@ -137,13 +143,21 @@ export class MapService {
         if (index == 0) {
           return currentValue;
         }
+        const line = new LineString([previousValue, currentValue]);
+        tripDistance = tripDistance + line.getLength();
         const feature = new Feature({
-          geometry: new LineString([previousValue, currentValue]),
+          geometry: line,
           name: 'Line',
         });
         lineFeatures.push(feature);
         return currentValue;
       });
+
+    this.tripsInfo[`${trip.title}`] = {
+      distance: tripDistance,
+      duration: tripDurationInMs,
+      startedIn: trip.startDate,
+    };
     return [...stepsFeatures, ...lineFeatures];
   }
   private generateLayerFromFeatures(
@@ -221,7 +235,7 @@ export class MapService {
     } else {
       setTimeout(() => {
         this.mapIsAlreadyCentering = false;
-      }, this.mapAnimationDuration);
+      }, this.mapAnimationDuration * 1.7);
 
       this._view$.next({ center: coordinates, zoom: zoom });
       this.mapIsAlreadyCentering = true;

@@ -1,0 +1,116 @@
+form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1vw;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2vw;
+}
+.goBack {
+  font-size: 3vw;
+  text-align: left;
+  cursor: pointer;
+  color: white;
+  background: none;
+  border: none;
+  align-self: left;
+}
+.add-button {
+  font: inherit;
+  cursor: pointer;
+  font-size: 2vw;
+  color: white;
+  background: rgba(0, 0, 0, 0.496);
+  border: 0.5px solid white;
+  padding: 0.5vw;
+  width: fit-content;
+  margin: 2vw auto;
+  border-radius: 0.5vw;
+  transition: transform 100ms ease-in-out;
+}
+.add-button:disabled {
+  color: rgba(0, 0, 0, 0.416);
+  background-color: rgba(255, 255, 255, 0.271);
+  border: none;
+  cursor: default;
+  &:hover {
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+label {
+  font-weight: 700;
+  font-size: 1.5vw;
+}
+input,
+select {
+  padding: 0.5vw;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.899);
+  font-size: 1.5vw;
+}
+input:focus-visible {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.882);
+  outline: none;
+}
+.title {
+  font-family: "flix";
+}
+.add-button:hover {
+  box-shadow: 0 0 10px white;
+  transform: scale(1.08);
+}
+.delete-trip-button {
+  width: 5vw;
+  height: 5vw;
+  margin-top: auto;
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.deletion-modal-container {
+  margin-top: 25%;
+  height: 50vh;
+  width: 100%;
+  border-radius: 1vw;
+  overflow: hidden;
+  text-align: center;
+}
+.deletion-modal {
+  height: 100%;
+  width: 100%;
+  padding: 1vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  backdrop-filter: invert(80%);
+}
+.deletion-modal-buttons-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.deletion-modal-button {
+  font-size: 2vw;
+  color: white;
+  background: none;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+  border: 2px solid white;
+  cursor: pointer;
+  &:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 0 0 5px black;
+  }
+}
+.confirm {
+  color: black;
+  background-color: lightgray;
+  border: none;
+}

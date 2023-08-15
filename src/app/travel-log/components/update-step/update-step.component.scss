@@ -92,3 +92,6 @@ input:focus-visible {
 .toDelete {
   filter: grayscale(50);
 }
+.cancel-delete-picture-button {
+  backdrop-filter: blur(20px);
+}

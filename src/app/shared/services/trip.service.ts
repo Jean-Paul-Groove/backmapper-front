@@ -78,6 +78,16 @@ export class TripService {
   getOneTripById(id: number): Observable<Trip | null> {
     return this.http.get<Trip | null>(`${environment.apiUrl}/trips/${id}`);
   }
+  updateTrip(id: number, newTripInfo: CreateTripDto): Observable<Trip> {
+    return this.http.put<Trip>(
+      `${environment.apiUrl}/trips/${id}`,
+      newTripInfo
+    );
+  }
+  deleteTrip(id: number): Observable<Trip> {
+    return this.http.delete<Trip>(`${environment.apiUrl}/trips/${id}`);
+  }
+
   addAStepToATrip(
     stepContent: {
       title: string;

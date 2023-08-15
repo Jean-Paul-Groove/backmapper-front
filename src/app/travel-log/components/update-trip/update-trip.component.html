@@ -1,0 +1,64 @@
+<form action="" *ngIf="tripDeletionModal === false; else deletionModal">
+  <p>Modifier le voyage</p>
+  <button class="goBack" (click)="onGoBackToTrip($event)">←</button>
+  <div class="form-field">
+    <label for="title">Titre</label>
+    <input
+      type="text"
+      id="titre"
+      [formControl]="titleCtrl"
+      class="title"
+      [ngStyle]="{
+        color: colorCtrl.value ? tripColor[colorCtrl.value] : 'white'
+      }"
+    />
+  </div>
+  <div class="form-field">
+    <label for="date">Date de début: {{ dateCtrl.value | date }}</label>
+    <input type="date" name="date" id="date" [formControl]="dateCtrl" />
+  </div>
+  <div class="form-field">
+    <label for="color">Couleur du voyage</label>
+    <select name="color" id="color" [formControl]="colorCtrl">
+      <option *ngFor="let color of tripColorDictionary" [value]="color">
+        {{ color | titlecase }}
+      </option>
+    </select>
+  </div>
+  <button
+    class="add-button"
+    (click)="onUpdateTrip($event)"
+    [disabled]="!tripFormGroup.valid"
+  >
+    Modifier
+  </button>
+  <button class="delete-trip-button" (click)="onDeleteTrip($event)">
+    <app-delete-svg color="white"></app-delete-svg>
+  </button>
+</form>
+<ng-template #deletionModal>
+  <div
+    class="deletion-modal-container"
+    [ngStyle]="{
+      backgroundColor: tripColor[trip.color]
+    }"
+  >
+    <div class="deletion-modal">
+      <p>Êtes vous sûr de vouloir supprimer ce voyage définitivement ?</p>
+      <div class="deletion-modal-buttons-container">
+        <button
+          class="deletion-modal-button confirm"
+          (click)="onConfirmTripDeletion($event)"
+        >
+          Oui
+        </button>
+        <button
+          class="deletion-modal-button non"
+          (click)="onCancelTripDeletion($event)"
+        >
+          Non !!
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

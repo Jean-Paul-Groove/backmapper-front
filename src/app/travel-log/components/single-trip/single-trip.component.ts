@@ -16,6 +16,8 @@ export class SingleTripComponent implements OnInit {
   trip$!: Observable<Trip | null>;
   tripId!: number;
   tripColor!: string;
+  tripInfo = { distance: 0, duration: 0, startedIn: '' };
+  editTrip: boolean = false;
   constructor(
     private tripsService: TripService,
     private route: ActivatedRoute,
@@ -43,6 +45,7 @@ export class SingleTripComponent implements OnInit {
           if (trip.color) {
             this.tripColor = TripColor[trip.color];
           }
+          this.tripInfo = this.mapService.tripsInfo[trip.title];
         } else {
           this.router.navigateByUrl('trips');
         }
@@ -53,10 +56,20 @@ export class SingleTripComponent implements OnInit {
   onGoBackToTripList() {
     this.router.navigateByUrl('/trips');
   }
+  onEditTrip(event: Event) {
+    event.preventDefault();
+    this.editTrip = true;
+  }
+  onCancelEdit() {
+    this.editTrip = false;
+  }
   onAddAStep() {
     this.router.navigateByUrl('/trips/' + this.tripId + '/new-step');
   }
   onStepGotModified() {
+    this.initializeTrip();
+  }
+  onTripGotUpdated() {
     this.initializeTrip();
   }
 }

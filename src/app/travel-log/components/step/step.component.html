@@ -11,7 +11,7 @@
       (click)="onDeleteStep($event)"
       *ngIf="editbuttonsVisible"
     >
-      X
+      <app-delete-svg color="white"></app-delete-svg>
     </button>
     <button
       class="edit-step-button edit-button"
@@ -19,10 +19,10 @@
       (click)="onEditStep($event)"
       *ngIf="editbuttonsVisible"
     >
-      Edit
+      <app-edit-svg color="white"></app-edit-svg>
     </button>
 
-    <h3>{{ step.title }}</h3>
+    <h3 class="step-title">{{ step.title }}</h3>
     <p class="step-date">
       Etape {{ stepNumber }} le {{ step.date | date : "dd/MM/YYYY" }}
     </p>

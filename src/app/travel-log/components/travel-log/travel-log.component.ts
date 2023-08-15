@@ -25,6 +25,7 @@ export class TravelLogComponent implements OnInit {
   ngOnInit(): void {
     this.initializeObservables();
     this.displayAllTripsOnMap();
+    console.log(this.mapService.tripsInfo);
   }
   private initializeObservables() {
     this.trips$ = this.tripService.getAllTrips();
