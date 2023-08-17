@@ -1,0 +1,7 @@
+<form class="select-layer-form">
+  <p>Choississez le fond de carte</p>
+  <select [formControl]="selectCtrl" (change)="onLayerSelected()">
+    <option *ngFor="let layer of layerEnum" [value]="layer">{{ layer }}</option>
+  </select>
+  <button (click)="onLayerSelected()">x</button>
+</form>

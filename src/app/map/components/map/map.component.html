@@ -1,4 +1,15 @@
 <div id="map-root">
+  <button
+    (click)="onOpenLayerPicker()"
+    class="layer-picker"
+    *ngIf="!layerPickerOpen"
+  >
+    <app-map-svg></app-map-svg>
+  </button>
+  <app-layer-picker
+    (layerSelected)="layerPickerOpen = false"
+    *ngIf="layerPickerOpen"
+  ></app-layer-picker>
   <div class="loader-container" *ngIf="mapService.loading$ | async">
     <app-loader-svg color="white"></app-loader-svg>
   </div>

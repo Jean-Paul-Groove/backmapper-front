@@ -29,7 +29,7 @@ export class MapService {
   source = new VectorSource();
   tripsInfo: { [key: string]: any } = {};
   private tripLines: [width: number, spacing: number] = [10, 10];
-  private baseLayersDictionary = [
+  baseLayersDictionary = [
     { name: 'OSMStandard', value: new TileLayer({ source: new OSM() }) },
     {
       name: 'OSMHumanitarian',
@@ -77,6 +77,10 @@ export class MapService {
   get baseLayer$(): Observable<BaseLayer> {
     return this._baseLayer$.asObservable();
   }
+  private _baseLayerName$ = new BehaviorSubject<string>('StamenToner');
+  get baseLayerName$(): Observable<string> {
+    return this._baseLayerName$.asObservable();
+  }
   private _view$ = new BehaviorSubject<{ center: Coordinates; zoom: number }>({
     center: [0, 0],
     zoom: 5,
@@ -113,7 +117,6 @@ export class MapService {
       .filter((layer) => layer.name === layerName)
       .map((layer) => layer.value)[0];
   }
-
   private addStepsFeatures(trip: Trip): Feature[] {
     let tripDistance = 0;
     let tripDurationInMs = 0;
@@ -188,6 +191,11 @@ export class MapService {
     this._loading$.next(state);
   }
   //Déclaration de méthodes destinées aux autres composants pour intéragir avec la carte
+  setNewBaseLayer(layerName: string) {
+    this._baseLayer$.next(this.provideLayer(layerName));
+    this._baseLayerName$.next(layerName);
+  }
+
   setNewTripLayers(trips: Trip[]) {
     this.setLoading(true);
     const updatedTripLayers: BaseLayer[] = [];
@@ -240,12 +248,21 @@ export class MapService {
     ) {
       return;
     } else {
+      const steps: any[] = Array.from(
+        document.getElementsByClassName('travel-step')
+      );
       setTimeout(() => {
         this.mapIsAlreadyCentering = false;
-      }, this.mapAnimationDuration * 1.7);
+        for (const step of steps) {
+          step.style.cursor = 'pointer';
+        }
+      }, this.mapAnimationDuration * 2);
 
       this._view$.next({ center: coordinates, zoom: zoom });
       this.mapIsAlreadyCentering = true;
+      for (const step of steps) {
+        step.style.cursor = 'wait';
+      }
     }
   }
 

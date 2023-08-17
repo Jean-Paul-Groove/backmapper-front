@@ -1,22 +1,12 @@
-#map-root {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-}
-.loader-container {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 55%;
-  width: 20%;
-}
-.layer-picker {
+.select-layer-form {
+  font-family: "work sans";
+  color: white;
   position: absolute;
   backdrop-filter: blur(10px);
   border-right: none;
   right: 30%;
   top: 60%;
-  width: 3.5vw;
+  width: fit-content;
   border-radius: 0.5vw;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -27,10 +17,23 @@
   border-left: 1px rgba(178, 178, 178, 0.618) solid;
   border-top: 1px rgba(178, 178, 178, 0.618) solid;
   border-bottom: 1px rgba(178, 178, 178, 0.618) solid;
+}
+button {
+  color: white;
+  background: none;
+  border: none;
   cursor: pointer;
+  margin-left: 5vw;
+  border-radius: 0.2vw;
+  width: fit-content;
+}
+select {
+  background-color: black;
+  padding: 0 0.5vw;
+  color: white;
 }
 @media screen and (max-width: 650px) {
-  .layer-picker {
+  .select-layer-form {
     right: 0;
   }
 }

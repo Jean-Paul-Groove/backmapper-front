@@ -35,6 +35,7 @@ export class MapComponent implements OnInit {
   mapElement!: HTMLElement;
   mapWidthInPx!: number;
   mapRightPadding!: number;
+  layerPickerOpen!: boolean;
 
   constructor(public mapService: MapService) {}
 
@@ -142,5 +143,8 @@ export class MapComponent implements OnInit {
         })
       )
       .subscribe();
+  }
+  onOpenLayerPicker() {
+    this.layerPickerOpen = true;
   }
 }
