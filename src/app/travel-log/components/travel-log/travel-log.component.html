@@ -1,17 +1,28 @@
-<h2 class="trip-list-title">Tous vos voyages:</h2>
-<ul class="tripList">
-  <li *ngFor="let trip of trips$ | async">
-    <button
-      (click)="onTripSelection(trip)"
-      *ngIf="trip.color"
-      [ngStyle]="{ 'background-color': tripColor[trip.color] }"
-    >
-      <h3>
-        {{ trip.title | titlecase }}
-      </h3>
+<app-loader-svg
+  color="white"
+  *ngIf="tripService.loading$ | async; else travelLog"
+></app-loader-svg>
+<ng-template #travelLog>
+  <div class="travel-log">
+    <h2 class="trip-list-title">Tous vos voyages:</h2>
+    <ul class="tripList" @tripList *ngIf="trips$ | async as trips">
+      <li *ngFor="let trip of trips" @tripItem>
+        <button
+          (click)="onTripSelection(trip)"
+          *ngIf="trip.color"
+          [ngStyle]="{ 'background-color': tripColor[trip.color] }"
+        >
+          <h3>
+            {{ trip.title | titlecase }}
+          </h3>
+        </button>
+      </li>
+      <li class="add-a-trip-li" *ngIf="authService.isLoggedAs() !== null">
+        <button class="add-a-trip" (click)="onAddATrip()">+</button>
+      </li>
+    </ul>
+    <button class="back-to-connect-button" (click)="onBackToConnect()">
+      <app-user-svg color="white"></app-user-svg>
     </button>
-  </li>
-  <li class="add-a-trip-li">
-    <button class="add-a-trip" (click)="onAddATrip()">+</button>
-  </li>
-</ul>
+  </div>
+</ng-template>

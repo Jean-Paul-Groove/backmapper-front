@@ -75,3 +75,12 @@ h2 {
     display: none;
   }
 }
+@media screen and (max-width: 650px) {
+  .ol-attribution {
+    width: 100%;
+  }
+  .ol-zoom {
+    right: 0;
+    height: fit-content;
+  }
+}

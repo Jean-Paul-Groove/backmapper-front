@@ -1,8 +1,18 @@
+import {
+  trigger,
+  transition,
+  query,
+  stagger,
+  animateChild,
+  useAnimation,
+} from '@angular/animations';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
+import { slideInAnimation } from 'src/app/shared/animations/slide-in.animation';
 import { TripColor } from 'src/app/shared/enum/trip-color.enum';
 import { Trip } from 'src/app/shared/models/trip.model';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { MapService } from 'src/app/shared/services/map.service';
 import { TripService } from 'src/app/shared/services/trip.service';
 
@@ -11,18 +21,32 @@ import { TripService } from 'src/app/shared/services/trip.service';
   templateUrl: './single-trip.component.html',
   styleUrls: ['./single-trip.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('stepList', [
+      transition(':enter', [
+        query('@stepItem', [stagger(50, [animateChild()])], {
+          optional: true,
+        }),
+      ]),
+    ]),
+    trigger('stepItem', [
+      transition(':enter', [useAnimation(slideInAnimation)]),
+    ]),
+  ],
 })
 export class SingleTripComponent implements OnInit {
   trip$!: Observable<Trip | null>;
+  trip!: Trip;
   tripId!: number;
   tripColor!: string;
   tripInfo = { distance: 0, duration: 0, startedIn: '' };
   editTrip: boolean = false;
   constructor(
-    private tripsService: TripService,
+    public tripsService: TripService,
     private route: ActivatedRoute,
     private router: Router,
-    private mapService: MapService
+    private mapService: MapService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -31,8 +55,17 @@ export class SingleTripComponent implements OnInit {
   }
   private initializeTrip() {
     this.trip$ = this.tripsService.getOneTripById(this.tripId).pipe(
+      map((trip) => {
+        if (!trip) {
+          return null;
+        } else {
+          console.log(trip);
+          return trip;
+        }
+      }),
       tap((trip) => {
         if (trip) {
+          this.trip = trip;
           if (trip.steps && trip.steps.length > 0) {
             this.mapService.setNewTripLayers([trip]);
             this.mapService.defineCenterOfMap(
@@ -51,6 +84,7 @@ export class SingleTripComponent implements OnInit {
         }
       })
     );
+    this.trip$.subscribe();
   }
 
   onGoBackToTripList() {

@@ -18,6 +18,7 @@ import { Coordinates } from 'src/app/shared/models/coordinates.model';
 import { Draw, Modify } from 'ol/interaction.js';
 import { Point } from 'ol/geom';
 import { defaults } from 'ol/control/defaults';
+import { TripService } from 'src/app/shared/services/trip.service';
 
 @Component({
   selector: 'app-map',
@@ -35,7 +36,7 @@ export class MapComponent implements OnInit {
   mapWidthInPx!: number;
   mapRightPadding!: number;
 
-  constructor(private mapService: MapService) {}
+  constructor(public mapService: MapService) {}
 
   ngOnInit(): void {
     this.initializeObservables();
@@ -52,8 +53,8 @@ export class MapComponent implements OnInit {
       this.mapWidthInPx = +window
         .getComputedStyle(this.mapElement)
         .width.split('px')[0];
-      console.log('Mapwidth = ' + this.mapWidthInPx);
-      this.mapRightPadding = this.mapWidthInPx * 0.3;
+      this.mapRightPadding =
+        this.mapWidthInPx > 650 ? this.mapWidthInPx * 0.3 : 0;
     }
   }
   private initializeObservables() {
@@ -99,18 +100,16 @@ export class MapComponent implements OnInit {
           return { center: olProj.fromLonLat(view.center), zoom: view.zoom };
         }),
         tap((view) => {
-          this.map
-            .getView()
-            .animate(
-              {
-                center: view.center,
-                duration: this.mapService.mapAnimationDuration,
-              },
-              {
-                zoom: view.zoom,
-                duration: this.mapService.mapAnimationDuration,
-              }
-            );
+          this.map.getView().animate(
+            {
+              center: view.center,
+              duration: this.mapService.mapAnimationDuration,
+            },
+            {
+              zoom: view.zoom,
+              duration: this.mapService.mapAnimationDuration,
+            }
+          );
         })
       )
       .subscribe();

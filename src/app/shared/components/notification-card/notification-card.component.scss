@@ -1,0 +1,24 @@
+.error-card {
+  position: relative;
+  background: rgba(255, 0, 0, 0.622);
+  backdrop-filter: blur(10px);
+  color: white;
+  margin-top: 1vw;
+  border: 1px solid white;
+  padding: 2vw;
+  border-radius: 1vw;
+}
+.clear {
+  position: absolute;
+  top: 1vw;
+  right: 1vw;
+  border: 1px white solid;
+  background: none;
+  color: white;
+  padding: 0.2vw;
+  border-radius: 0.2vw;
+  cursor: pointer;
+}
+.notif-type {
+  font-weight: 800;
+}

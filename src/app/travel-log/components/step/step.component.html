@@ -1,4 +1,5 @@
 <div
+  @stepItem
   *ngIf="step"
   class="travel-step"
   (click)="onClick()"
@@ -9,7 +10,7 @@
       class="delete-step-button edit-button"
       aria-label="Supprimer"
       (click)="onDeleteStep($event)"
-      *ngIf="editbuttonsVisible"
+      *ngIf="editbuttonsVisible && authService.isLoggedAs() !== null"
     >
       <app-delete-svg color="white"></app-delete-svg>
     </button>
@@ -17,23 +18,25 @@
       class="edit-step-button edit-button"
       aria-label="Modifier"
       (click)="onEditStep($event)"
-      *ngIf="editbuttonsVisible"
+      *ngIf="editbuttonsVisible && authService.isLoggedAs() !== null"
     >
       <app-edit-svg color="white"></app-edit-svg>
     </button>
 
     <h3 class="step-title">{{ step.title }}</h3>
     <p class="step-date">
-      Etape {{ stepNumber }} le {{ step.date | date : "dd/MM/YYYY" }}
+      Etape#{{ stepNumber }} le {{ step.date | date : "dd/MM/YYYY" }}
     </p>
     <p>{{ step.description }}</p>
-    <ng-container *ngIf="step.pictures"
-      ><img
+    <div *ngIf="step.pictures" @imgList>
+      <img
+        @stepImg
         class="travel-step-img"
         crossorigin="anonymous"
         *ngFor="let pictureUrl of step.pictures.split(',')"
-        [src]="apiUrl + '/' + pictureUrl"
-        [alt]="step.title" /></ng-container
+        [src]="imgUrlPrefix + pictureUrl"
+        [alt]="step.title"
+      /></div
   ></ng-container>
   <ng-template #editStep>
     <div class="delete-modal" *ngIf="deleteModal; else updateStep">
@@ -55,6 +58,7 @@
         (stepIsEdited)="onStepIsEdited()"
         [step]="step"
         [tripColor]="tripColor"
+        [tripId]="tripId"
       ></app-update-step
     ></ng-template>
   </ng-template>

@@ -1,1 +1,5 @@
-<div id="map-root"></div>
+<div id="map-root">
+  <div class="loader-container" *ngIf="mapService.loading$ | async">
+    <app-loader-svg color="white"></app-loader-svg>
+  </div>
+</div>

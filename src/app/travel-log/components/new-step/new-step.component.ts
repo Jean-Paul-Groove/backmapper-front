@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, map, take, takeUntil, tap } from 'rxjs';
 import { Coordinates } from 'src/app/shared/models/coordinates.model';
 import { Trip } from 'src/app/shared/models/trip.model';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { MapService } from 'src/app/shared/services/map.service';
 import { TripService } from 'src/app/shared/services/trip.service';
 
@@ -36,22 +37,27 @@ export class NewStepComponent implements OnInit, OnDestroy {
   stepFormGroup!: FormGroup;
   fileList: File[] = [];
   imgToDisplay: string[] = [];
+  tripColor!: string;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private tripService: TripService,
-    private mapService: MapService
+    public tripService: TripService,
+    private mapService: MapService,
+    private authService: AuthService
   ) {}
   ngOnInit(): void {
     this.tripId = +this.route.snapshot.params['id'];
+    if (this.authService.isLoggedAs() === null) {
+      this.router.navigateByUrl('trips/' + this.tripId);
+    }
     this.trip$ = this.tripService.getOneTripById(this.tripId).pipe(
       map((trip) => {
-        if (trip) {
-          return trip;
-        } else {
+        if (!trip) {
           this.router.navigateByUrl('trips');
+          return null;
+        } else {
           return trip;
         }
       })
@@ -81,6 +87,7 @@ export class NewStepComponent implements OnInit, OnDestroy {
         take(1),
         tap((trip) => {
           if (trip) {
+            this.tripColor = trip.color;
             this.mapService.setNewTripLayers([trip]);
             if (trip.steps.length > 0) {
               this.mapService.defineCenterOfMap(
@@ -134,7 +141,7 @@ export class NewStepComponent implements OnInit, OnDestroy {
         this.fileList
       )
       .pipe(
-        tap((step) => {
+        tap(() => {
           this.mapService.resetNewStepPin();
           this.onGoBackToTrip();
         })

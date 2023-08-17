@@ -1,0 +1,103 @@
+form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1vw;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2vw;
+}
+.header {
+  font-size: larger;
+  font-weight: bold;
+}
+.connexion-button,
+.welcome-button {
+  font: inherit;
+  cursor: pointer;
+  font-size: 2vw;
+  color: white;
+  background: rgba(0, 0, 0, 0.496);
+  border: 0.5px solid white;
+  padding: 0.5vw;
+  width: fit-content;
+  margin: 2vw auto;
+  border-radius: 0.5vw;
+  transition: transform 100ms ease-in-out;
+  &:disabled {
+    color: rgba(0, 0, 0, 0.416);
+    background-color: rgba(255, 255, 255, 0.271);
+    border: none;
+    cursor: default;
+    &:hover {
+      box-shadow: none;
+      transform: none;
+    }
+  }
+  &:hover {
+    box-shadow: 0 0 10px white;
+    transform: translate(1px, 1px);
+  }
+}
+.guest-button,
+.open-connect-form-button {
+  font: inherit;
+  cursor: pointer;
+  font-size: 2vw;
+  color: white;
+  background: none;
+  border: none;
+  margin-top: 2vw;
+  width: 100%;
+  text-align: center;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.welcome-container {
+  margin-top: 20vh;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 2vw;
+}
+.welcome-button-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.welcome-button {
+  font-size: inherit;
+}
+.connexion-form {
+  margin-top: 10vh;
+  height: fit-content;
+  padding: 2vw;
+}
+fieldset {
+  border: none;
+  border-top: 1px solid white;
+}
+legend {
+  margin: auto;
+  padding: 1vw;
+}
+.goBack {
+  font-size: 3vw;
+  text-align: left;
+  cursor: pointer;
+  color: white;
+  background: none;
+  border: none;
+}
+@media screen and (max-width: 650px) {
+  .welcome-container {
+    margin-top: 5vh;
+    padding: 0 5vw;
+  }
+}

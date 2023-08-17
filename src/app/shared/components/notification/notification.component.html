@@ -1,0 +1,7 @@
+<div *ngIf="notificationService.errors.length" class="card-wrapper">
+  <app-notification-card
+    *ngFor="let error of notificationService.errors; index as i"
+    [error]="error"
+    [index]="i"
+  ></app-notification-card>
+</div>

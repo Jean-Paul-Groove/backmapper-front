@@ -33,7 +33,7 @@
     Modifier
   </button>
   <button class="delete-trip-button" (click)="onDeleteTrip($event)">
-    <app-delete-svg color="white"></app-delete-svg>
+    <app-delete-svg [color]="tripColor[trip.color]"></app-delete-svg>
   </button>
 </form>
 <ng-template #deletionModal>

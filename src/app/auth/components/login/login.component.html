@@ -1,0 +1,48 @@
+<ng-container *ngIf="connectForm; else welcome"
+  ><div class="connexion-form">
+    <button class="goBack" (click)="onGoBackToWelcome()">←</button>
+    <button class="open-connect-form-button" (click)="onConnectAsUser()">
+      Connexion utilisateur
+    </button>
+    <form *ngIf="connectAsUser">
+      <div class="form-field">
+        <label for="username">Nom d'utilisateur</label>
+        <input type="text" id="username" [formControl]="usernameCtrl" />
+      </div>
+      <div class="form-field">
+        <label for="password">Mot de passe</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          [formControl]="passwordCtrl"
+        />
+      </div>
+      <button
+        class="connexion-button"
+        (click)="onConnect($event)"
+        [disabled]="!connexionFormGroup.valid"
+      >
+        Connexion !
+      </button>
+    </form>
+  </div>
+  <fieldset><legend>ou</legend></fieldset>
+  <button class="guest-button" (click)="onContinueAsGuest($event)">
+    Continuer comme invité
+  </button>
+</ng-container>
+
+<ng-template #welcome>
+  <div class="welcome-container">
+    <p>Bienvenue !</p>
+    <div class="welcome-button-container">
+      <button (click)="onSeeTrips($event)" class="welcome-button">
+        Accéder aux voyages
+      </button>
+      <button (click)="onOpenConnectForm($event)" class="welcome-button">
+        Connexion
+      </button>
+    </div>
+  </div>
+</ng-template>

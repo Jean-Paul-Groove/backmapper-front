@@ -1,3 +1,7 @@
+<app-loader-svg
+  color="white"
+  *ngIf="tripService.loading$ | async"
+></app-loader-svg>
 <form action="">
   <h3>Ajouter un voyage</h3>
   <button class="goBack" (click)="onGoBackToTripList()">←</button>

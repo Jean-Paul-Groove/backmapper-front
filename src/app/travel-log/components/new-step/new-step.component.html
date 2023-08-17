@@ -1,3 +1,8 @@
+<app-loader-svg
+  [color]="tripColor ? tripColor : 'white'"
+  *ngIf="tripService.loading$ | async"
+></app-loader-svg>
+
 <form action="">
   <button class="goBack" (click)="onGoBackToTrip()">←</button>
   <div class="form-field">

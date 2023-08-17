@@ -7,10 +7,11 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TripColor } from 'src/app/shared/enum/trip-color.enum';
-import { Trip } from 'src/app/shared/models/trip.model';
 import { TripService } from 'src/app/shared/services/trip.service';
 import { CreateTripDto } from '../../dto/create-trip.dto';
 import { tap } from 'rxjs';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { Trip } from 'src/app/shared/models/trip.model';
 
 @Component({
   selector: 'app-new-trip',
@@ -30,11 +31,15 @@ export class NewTripComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private tripService: TripService,
-    private router: Router
+    public tripService: TripService,
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    if (this.authService.isLoggedAs() === null) {
+      this.router.navigateByUrl('trips');
+    }
     this.titleCtrl = this.formBuilder.control('', [Validators.required]);
     this.dateCtrl = this.formBuilder.control('', [Validators.required]);
     this.colorCtrl = this.formBuilder.control('vert', [Validators.required]);
@@ -53,7 +58,15 @@ export class NewTripComponent implements OnInit {
 
     this.tripService
       .addANewTrip(newTripInfo)
-      .pipe(tap((newTrip) => this.router.navigateByUrl('trips/' + newTrip.id)))
+      .pipe(
+        tap((newTrip) => {
+          if (!newTrip) {
+            this.router.navigateByUrl('trips');
+          } else {
+            this.router.navigateByUrl('trips/' + newTrip.id);
+          }
+        })
+      )
       .subscribe();
   }
   onGoBackToTripList() {

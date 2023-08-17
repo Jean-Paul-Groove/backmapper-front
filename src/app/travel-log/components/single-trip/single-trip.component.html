@@ -1,8 +1,16 @@
-<ng-container *ngIf="trip$ | async as trip"
-  ><div class="trip-header" *ngIf="editTrip === false">
+<app-loader-svg
+  color="white"
+  *ngIf="tripsService.loading$ | async"
+></app-loader-svg>
+<ng-container
+  ><div class="trip-header" *ngIf="editTrip === false && trip">
     <button (click)="onGoBackToTripList()">←</button>
     <h2 [ngStyle]="{ color: tripColor }">{{ trip.title | titlecase }}</h2>
-    <button class="edit-trip-button" (click)="onEditTrip($event)">
+    <button
+      class="edit-trip-button"
+      (click)="onEditTrip($event)"
+      *ngIf="authService.isLoggedAs() !== null"
+    >
       <app-edit-svg [color]="tripColor"></app-edit-svg>
     </button>
     <div class="trip-info" *ngIf="tripInfo">
@@ -19,21 +27,27 @@
       </p>
     </div>
   </div>
-  <ng-container *ngIf="editTrip == false; else editTripFrom"
-    ><app-step
-      (stepIsModified)="onStepGotModified()"
-      *ngFor="let step of trip.steps; index as i"
-      [step]="step"
-      [stepNumber]="i + 1"
-      [tripColor]="tripColor"
-    ></app-step>
-    <div class="add-a-step-container">
+  <ng-container *ngIf="editTrip == false && trip; else editTripFrom"
+    ><div @stepList>
+      <app-step
+        (stepIsModified)="onStepGotModified()"
+        *ngFor="let step of trip.steps; index as i"
+        [step]="step"
+        [stepNumber]="i + 1"
+        [tripColor]="tripColor"
+        [tripId]="trip.id"
+        @stepItem
+      ></app-step>
+    </div>
+
+    <div class="add-a-step-container" *ngIf="authService.isLoggedAs() !== null">
       <p>Ajouter une étape:</p>
       <button class="add-a-step" (click)="onAddAStep()">+</button>
     </div></ng-container
   >
   <ng-template #editTripFrom>
     <app-update-trip
+      *ngIf="editTrip"
       (backToTrip)="onCancelEdit()"
       (tripUdated)="onTripGotUpdated()"
       [trip]="trip"

@@ -184,9 +184,12 @@ export class MapService {
     });
     return tripLayer;
   }
-
+  private setLoading(state: boolean) {
+    this._loading$.next(state);
+  }
   //Déclaration de méthodes destinées aux autres composants pour intéragir avec la carte
   setNewTripLayers(trips: Trip[]) {
+    this.setLoading(true);
     const updatedTripLayers: BaseLayer[] = [];
     for (const trip of trips) {
       if (trip.steps.length > 0) {
@@ -196,6 +199,10 @@ export class MapService {
       }
     }
     this._tripLayersOnMap$.next(updatedTripLayers);
+    this.setLoading(false);
+  }
+  clearTripLayers() {
+    this._tripLayersOnMap$.next([]);
   }
   setSinglePin(step: Step, tripColor: string) {
     const feature = new Feature({
@@ -243,6 +250,7 @@ export class MapService {
   }
 
   drawOnMap(tripColor: string) {
+    this.setLoading(true);
     const vector = new VectorLayer({
       source: this.source,
       style: new Style({
@@ -254,6 +262,7 @@ export class MapService {
     });
 
     this._drawingForTrip$.next(vector);
+    this.setLoading(false);
   }
   stopDrowOnMap() {
     this._drawingForTrip$.next(undefined);

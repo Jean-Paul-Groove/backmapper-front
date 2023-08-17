@@ -10,6 +10,7 @@ import { Observable, Subject, map, take, tap, takeUntil } from 'rxjs';
 import { TripColor } from 'src/app/shared/enum/trip-color.enum';
 import { Coordinates } from 'src/app/shared/models/coordinates.model';
 import { Step } from 'src/app/shared/models/step.model';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { MapService } from 'src/app/shared/services/map.service';
 import { TripService } from 'src/app/shared/services/trip.service';
 import { environment } from 'src/environments/environment.development';
@@ -22,6 +23,7 @@ import { environment } from 'src/environments/environment.development';
 export class UpdateStepComponent {
   @Input() step!: Step;
   @Input() tripColor!: string;
+  @Input() tripId!: number;
   @Output() stepIsEdited = new EventEmitter<boolean>();
   @Output() goBackToStep = new EventEmitter<boolean>();
   newStepCoordinates$!: Observable<Coordinates | undefined>;
@@ -32,6 +34,7 @@ export class UpdateStepComponent {
   stepFormGroup!: FormGroup;
   tripColorKey!: string;
   apiUrl = environment.apiUrl;
+  imgUrlPrefix = '';
   fileList: File[] = [];
   imgToDisplay: string[] = [];
   currentPictures: string[] = [];
@@ -43,7 +46,8 @@ export class UpdateStepComponent {
     private formBuilder: FormBuilder,
     private router: Router,
     private tripService: TripService,
-    private mapService: MapService
+    private mapService: MapService,
+    private authService: AuthService
   ) {}
   ngOnInit(): void {
     this.newStepCoordinates$ = this.mapService.newPinCoordinates$;
@@ -51,6 +55,9 @@ export class UpdateStepComponent {
     this.initializeCurrentStepPin();
     this.initializeForm();
     this.getCoordinates();
+    if (this.authService.isLoggedAs() !== 'guest') {
+      this.imgUrlPrefix = this.apiUrl + '/';
+    }
     this.tripColorKey =
       Object.keys(TripColor)[
         Object.values(TripColor).indexOf(this.tripColor as unknown as TripColor)
@@ -138,7 +145,8 @@ export class UpdateStepComponent {
       .updateStep(
         { ...stepContent, date: formatedDate },
         this.step.id,
-        this.fileList
+        this.fileList,
+        this.tripId
       )
       .pipe(
         tap(() => {
