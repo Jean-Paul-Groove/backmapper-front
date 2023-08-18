@@ -295,7 +295,7 @@ export class TripService {
       const body = JSON.stringify(stepContent);
       formData.append('stepInfo', body);
       const step = this.http
-        .post<Step>(`${environment.apiUrl}/trips/steps/${stepId}`, formData, {
+        .put<Step>(`${environment.apiUrl}/trips/steps/${stepId}`, formData, {
           headers,
         })
         .pipe(
