@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable, Subject, map, take, tap, takeUntil } from 'rxjs';
 import { TripColor } from 'src/app/shared/enum/trip-color.enum';
 import { Coordinates } from 'src/app/shared/models/coordinates.model';
@@ -81,7 +81,13 @@ export class UpdateStepComponent {
     this.dateCtrl = this.formBuilder.control<Date>(new Date(+this.step.date), [
       Validators.required,
     ]);
-    this.descriptionCtrl = this.formBuilder.control(`${this.step.description}`);
+    if (this.step.description) {
+      this.descriptionCtrl = this.formBuilder.control(
+        `${this.step.description}`
+      );
+    } else {
+    }
+    this.descriptionCtrl = this.formBuilder.control(``);
     this.coordinatesCtrl = this.formBuilder.control('', [Validators.required]);
     this.stepFormGroup = this.formBuilder.group({
       title: this.titleCtrl,

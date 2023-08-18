@@ -1,13 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { NotificationService } from '../../services/notification.service';
-import {
-  trigger,
-  transition,
-  useAnimation,
-  animate,
-  style,
-} from '@angular/animations';
-import { slideInAnimation } from '../../animations/slide-in.animation';
+import { trigger, transition, animate, style } from '@angular/animations';
 
 @Component({
   selector: 'app-notification-card',

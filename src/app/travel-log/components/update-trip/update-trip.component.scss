@@ -114,3 +114,22 @@ input:focus-visible {
   background-color: lightgray;
   border: none;
 }
+@media screen and (max-width: 650px) {
+  form {
+    padding: 5vw 10vw;
+    height: auto;
+  }
+  input,
+  select,
+  textarea,
+  label {
+    font-size: 4vw;
+  }
+  .goBack {
+    font-size: 7vw;
+    margin-left: 5vw;
+  }
+  .deletion-modal-button {
+    font-size: 4vw;
+  }
+}

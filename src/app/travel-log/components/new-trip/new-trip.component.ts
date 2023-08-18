@@ -11,7 +11,6 @@ import { TripService } from 'src/app/shared/services/trip.service';
 import { CreateTripDto } from '../../dto/create-trip.dto';
 import { tap } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { Trip } from 'src/app/shared/models/trip.model';
 
 @Component({
   selector: 'app-new-trip',

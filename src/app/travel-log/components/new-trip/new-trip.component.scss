@@ -64,3 +64,24 @@ input:focus-visible {
   box-shadow: 0 0 10px white;
   transform: scale(1.08);
 }
+@media screen and (max-width: 650px) {
+  form {
+    padding: 5vw 10vw;
+    height: fit-content;
+  }
+  input,
+  select,
+  textarea,
+  label {
+    font-size: 4vw;
+  }
+  .goBack {
+    font-size: 7vw;
+    margin-left: 5vw;
+  }
+  .add-button {
+    font-size: 4vw;
+    margin-top: 2vw;
+    margin-bottom: 5vw;
+  }
+}

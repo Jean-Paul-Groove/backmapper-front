@@ -32,18 +32,6 @@ export class MapService {
   baseLayersDictionary = [
     { name: 'OSMStandard', value: new TileLayer({ source: new OSM() }) },
     {
-      name: 'OSMHumanitarian',
-      value: new TileLayer({
-        source: new OSM({
-          url: 'https://{a-c}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-          attributions:
-            'donn&eacute;es &copy; <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
-        }),
-        minZoom: 1,
-        maxZoom: 20,
-      }),
-    },
-    {
       name: 'StamenTerrain',
       value: new TileLayer({
         source: new XYZ({
@@ -72,7 +60,7 @@ export class MapService {
 
   //Déclaration des béhaviour subjects pour le reactive state management
   private _baseLayer$ = new BehaviorSubject<BaseLayer>(
-    this.provideLayer('StamenToner')
+    this.provideLayer('OSMStandard')
   );
   get baseLayer$(): Observable<BaseLayer> {
     return this._baseLayer$.asObservable();

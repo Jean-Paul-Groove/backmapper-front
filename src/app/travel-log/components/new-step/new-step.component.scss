@@ -85,3 +85,25 @@ input:focus-visible {
   border: 1px white solid;
   margin-top: 1vw;
 }
+@media screen and (max-width: 650px) {
+  form {
+    padding: 5vw 10vw;
+  }
+  input,
+  select,
+  textarea,
+  label {
+    font-size: 4vw;
+  }
+  .goBack {
+    font-size: 7vw;
+    margin-left: 5vw;
+  }
+  .add-pin-button {
+    font-size: 3vw;
+  }
+  .add-step-button {
+    font-size: 4vw;
+    margin-top: 2vw;
+  }
+}

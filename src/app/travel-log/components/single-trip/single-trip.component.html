@@ -1,10 +1,9 @@
-<app-loader-svg
-  color="white"
-  *ngIf="tripsService.loading$ | async"
-></app-loader-svg>
+<div class="loader" *ngIf="tripsService.loading$ | async">
+  <app-loader-svg color="white"></app-loader-svg>
+</div>
 <ng-container
   ><div class="trip-header" *ngIf="editTrip === false && trip">
-    <button (click)="onGoBackToTripList()">←</button>
+    <button class="go-back-button" (click)="onGoBackToTripList()">←</button>
     <h2 [ngStyle]="{ color: tripColor }">{{ trip.title | titlecase }}</h2>
     <button
       class="edit-trip-button"
@@ -28,7 +27,7 @@
     </div>
   </div>
   <ng-container *ngIf="editTrip == false && trip; else editTripFrom"
-    ><div @stepList>
+    ><div class="step-list" @stepList>
       <app-step
         (stepIsModified)="onStepGotModified()"
         *ngFor="let step of trip.steps; index as i"

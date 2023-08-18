@@ -25,7 +25,7 @@ export class TripService {
   dummyTrips: Trip[] = [
     {
       id: 1,
-      title: 'AutoStop',
+      title: 'Croatie en Stop!',
       startDate: Date.now().toString(),
       steps: [
         {
@@ -33,13 +33,15 @@ export class TripService {
           title: 'Montpellier',
           coordinates: '3.876734, 43.611242',
           date: Date.now().toString(),
+          description: 'Premier voyage éditable',
         },
         {
           id: 2,
           title: 'Turin',
           coordinates: '7.682489, 45.067755',
           date: Date.now().toString(),
-          description: "finalement on y est pas allé c'est pour de faux",
+          description:
+            "Ahh l'Italie .... ou bien le Canada ? Où vous voulez en fait",
         },
         {
           id: 3,
@@ -52,27 +54,30 @@ export class TripService {
     },
     {
       id: 2,
-      title: 'Trip2',
+      title: 'Editez moi !',
       startDate: Date.now().toString(),
       steps: [
         {
           id: 1,
-          title: 'Test',
+          title: 'Etape',
           coordinates: '3.876734, 47.611242',
           date: Date.now().toString(),
         },
         {
           id: 2,
-          title: '2',
+          title: 'Etape 2',
           coordinates: '3.682489, 45.067755',
           date: Date.now().toString(),
-          description: "finalement on y est pas allé c'est pour de faux",
+          description:
+            'Si vous me cliquez dessus vous pourrez soit me supprimer soit changer mon contenu et même rajouter des photos !! Essayez pour voir ;)',
         },
         {
           id: 3,
-          title: '3',
+          title: 'Etape 3',
           coordinates: '15.962232, 49.842641',
           date: Date.now().toString(),
+          description:
+            'Si vous cliquez sur le petit crayon en haut à droite vous pourrez modifier le voyage: -titre; -date; -couleur;',
         },
       ],
       color: 'jaune',
@@ -101,14 +106,13 @@ export class TripService {
     if (this.authService.isLoggedAs() === 'guest') {
       return of(this.getOneTripByIdAsGuest(id));
     }
-    console.log('Je suis dans la fonction avant le pipe');
+
     this.setLoading(true);
     const trip = this.http
       .get<Trip | null | null>(`${environment.apiUrl}/trips/${id}`)
       .pipe(
         tap(() => {
           this.setLoading(false);
-          console.log('Je suis dans le tap');
         }),
         catchError((error: HttpErrorResponse) => {
           this.setLoading(false);

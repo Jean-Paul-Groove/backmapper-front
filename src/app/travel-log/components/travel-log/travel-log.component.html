@@ -1,7 +1,6 @@
-<app-loader-svg
-  color="white"
-  *ngIf="tripService.loading$ | async; else travelLog"
-></app-loader-svg>
+<div class="loader" *ngIf="tripService.loading$ | async; else travelLog">
+  <app-loader-svg color="white"></app-loader-svg>
+</div>
 <ng-template #travelLog>
   <div class="travel-log">
     <h2 class="trip-list-title">Tous vos voyages:</h2>

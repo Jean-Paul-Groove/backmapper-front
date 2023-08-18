@@ -102,7 +102,6 @@ export class StepComponent implements OnInit {
       .subscribe();
   }
   onStepIsEdited() {
-    console.log('redirection depuis step');
     this.editModal = false;
     this.stepIsModified.emit(true);
   }

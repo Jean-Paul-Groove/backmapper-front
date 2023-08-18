@@ -3,7 +3,7 @@ import { LoginDto } from '../../auth/dto/login.dto';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { TokenInfoDto } from 'src/app/auth/dto/token-info.dto';
 import { environment } from 'src/environments/environment.development';
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { Observable, catchError, of, tap } from 'rxjs';
 import { NotificationService } from './notification.service';
 
 @Injectable({

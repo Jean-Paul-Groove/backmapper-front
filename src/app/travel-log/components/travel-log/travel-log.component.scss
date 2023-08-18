@@ -57,4 +57,16 @@ li .add-a-trip {
   ul {
     padding-bottom: 5vh;
   }
+  .trip-list-title {
+    font-size: 6vw;
+    margin-right: 3vw;
+    margin-bottom: 3vw;
+    margin-top: 2vw;
+  }
+  .loader {
+    position: absolute;
+    width: 50%;
+    left: 25%;
+    height: 100%;
+  }
 }

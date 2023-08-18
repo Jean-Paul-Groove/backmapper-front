@@ -1,8 +1,7 @@
 .travel-step {
   width: 95%;
   height: fit-content;
-  margin: 1vw auto;
-  /*  background-color: rgba(199, 199, 199, 0.566); */
+  margin: 2vh auto;
   border: 1px solid rgba(255, 255, 255, 0.515);
   border-radius: 1.5vw;
   text-align: center;
@@ -40,7 +39,6 @@
   padding: 0.1vw;
   border-radius: 0.7vw;
   width: 2vw;
-  height: 2vw;
   cursor: pointer;
   &:hover {
     box-shadow: 1px 1px 5px white;
@@ -76,5 +74,13 @@
   padding: 0;
   &:hover {
     box-shadow: none;
+  }
+}
+@media screen and (max-width: 650px) {
+  .edit-button {
+    width: 3vw;
+  }
+  .travel-step {
+    margin: 3vh auto;
   }
 }

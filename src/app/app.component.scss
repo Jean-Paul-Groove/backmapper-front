@@ -68,6 +68,13 @@ h1 {
   transform: rotate(180deg);
 }
 @media screen and (max-width: 650px) {
+  .app {
+    width: 95%;
+    height: 98%;
+    top: 1%;
+    left: 2.5%;
+    min-width: 250px;
+  }
   .wrapper {
     width: 100%;
     height: 40%;
@@ -93,5 +100,8 @@ h1 {
     height: 60%;
     border-radius: 0;
     border-bottom: none;
+  }
+  h1 {
+    font-size: 5vw;
   }
 }

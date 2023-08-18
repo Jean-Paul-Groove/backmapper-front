@@ -1,9 +1,7 @@
 import {
-  animate,
   animateChild,
   query,
   stagger,
-  style,
   transition,
   trigger,
   useAnimation,
@@ -50,7 +48,6 @@ export class TravelLogComponent implements OnInit {
   ngOnInit(): void {
     this.initializeObservables();
     this.displayAllTripsOnMap();
-    console.log(this.mapService.tripsInfo);
   }
   private initializeObservables() {
     this.trips$ = this.tripService.getAllTrips();
@@ -83,6 +80,7 @@ export class TravelLogComponent implements OnInit {
   }
   onBackToConnect() {
     this.authService.token = '';
+    this.authService.userIsAGuest = false;
     this.mapService.clearTripLayers();
     this.router.navigateByUrl('');
   }

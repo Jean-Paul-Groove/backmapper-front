@@ -59,7 +59,6 @@ export class SingleTripComponent implements OnInit {
         if (!trip) {
           return null;
         } else {
-          console.log(trip);
           return trip;
         }
       }),

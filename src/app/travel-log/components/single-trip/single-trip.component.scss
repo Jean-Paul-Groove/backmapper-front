@@ -57,3 +57,26 @@ button {
   transform: translate(1px, 1px);
   box-shadow: none;
 }
+
+@media screen and (max-width: 650px) {
+  .edit-trip-button {
+    height: auto;
+    width: 4vw;
+  }
+  .step-list {
+    padding: 1.5vh 3vw;
+  }
+  .loader {
+    position: absolute;
+    width: 50%;
+    left: 25%;
+    height: 100%;
+  }
+  .trip-header {
+    padding-left: 10vw;
+  }
+  .go-back-button {
+    font-size: 7vw;
+    margin-bottom: 2vw;
+  }
+}
