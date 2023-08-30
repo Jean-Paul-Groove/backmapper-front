@@ -5,7 +5,6 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Observable, Subject, map, take, tap, takeUntil } from 'rxjs';
 import { TripColor } from 'src/app/shared/enum/trip-color.enum';
 import { Coordinates } from 'src/app/shared/models/coordinates.model';
@@ -44,7 +43,6 @@ export class UpdateStepComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
     private tripService: TripService,
     private mapService: MapService,
     private authService: AuthService
@@ -86,8 +84,9 @@ export class UpdateStepComponent {
         `${this.step.description}`
       );
     } else {
+      this.descriptionCtrl = this.formBuilder.control(``);
     }
-    this.descriptionCtrl = this.formBuilder.control(``);
+
     this.coordinatesCtrl = this.formBuilder.control('', [Validators.required]);
     this.stepFormGroup = this.formBuilder.group({
       title: this.titleCtrl,

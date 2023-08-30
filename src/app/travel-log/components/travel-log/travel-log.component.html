@@ -3,7 +3,7 @@
 </div>
 <ng-template #travelLog>
   <div class="travel-log">
-    <h2 class="trip-list-title">Tous vos voyages:</h2>
+    <h2 class="trip-list-title">Tous les voyages:</h2>
     <ul class="tripList" @tripList *ngIf="trips$ | async as trips">
       <li *ngFor="let trip of trips" @tripItem>
         <button
