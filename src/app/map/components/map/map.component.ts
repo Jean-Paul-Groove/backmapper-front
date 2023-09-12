@@ -2,23 +2,13 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import * as olProj from 'ol/proj';
-import {
-  Observable,
-  combineLatest,
-  map,
-  skip,
-  take,
-  takeUntil,
-  takeWhile,
-  tap,
-} from 'rxjs';
+import { Observable, combineLatest, map, skip, tap } from 'rxjs';
 import BaseLayer from 'ol/layer/Base';
 import { MapService } from 'src/app/shared/services/map.service';
 import { Coordinates } from 'src/app/shared/models/coordinates.model';
-import { Draw, Modify } from 'ol/interaction.js';
+import { Draw } from 'ol/interaction.js';
 import { Point } from 'ol/geom';
 import { defaults } from 'ol/control/defaults';
-import { TripService } from 'src/app/shared/services/trip.service';
 
 @Component({
   selector: 'app-map',
@@ -47,6 +37,14 @@ export class MapComponent implements OnInit {
     this.centerMap();
     this.drawOnMap();
   }
+
+  private initializeObservables() {
+    this.baseLayer$ = this.mapService.baseLayer$;
+    this.tripLayers$ = this.mapService.tripLayersOnMap$;
+    this.view$ = this.mapService.view$;
+    this.drawingForTrip$ = this.mapService.drawingForTrip$;
+  }
+
   private initializeMapwidthAndPadding() {
     const element = document.getElementById('map-root');
     if (element) {
@@ -57,12 +55,6 @@ export class MapComponent implements OnInit {
       this.mapRightPadding =
         this.mapWidthInPx > 650 ? this.mapWidthInPx * 0.3 : 0;
     }
-  }
-  private initializeObservables() {
-    this.baseLayer$ = this.mapService.baseLayer$;
-    this.tripLayers$ = this.mapService.tripLayersOnMap$;
-    this.view$ = this.mapService.view$;
-    this.drawingForTrip$ = this.mapService.drawingForTrip$;
   }
 
   private initializeMap() {

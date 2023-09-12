@@ -3,7 +3,7 @@ import BaseLayer from 'ol/layer/Base';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import XYZ from 'ol/source/XYZ';
-import { BehaviorSubject, Observable, of, take } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Trip } from '../models/trip.model';
 import { Feature } from 'ol';
 import { LineString, Point } from 'ol/geom';
@@ -11,12 +11,12 @@ import * as olProj from 'ol/proj';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import Icon from 'ol/style/Icon';
-import Stroke from 'ol/style/Stroke';
-import Style from 'ol/style/Style';
 import { TripColor } from '../enum/trip-color.enum';
 import { Coordinates } from '../models/coordinates.model';
 import { TripService } from './trip.service';
 import { Step } from '../models/step.model';
+import { Fill, Stroke, Style, Text } from 'ol/style';
+import { FeatureLike } from 'ol/Feature';
 
 @Injectable({
   providedIn: 'root',
@@ -65,7 +65,7 @@ export class MapService {
   get baseLayer$(): Observable<BaseLayer> {
     return this._baseLayer$.asObservable();
   }
-  private _baseLayerName$ = new BehaviorSubject<string>('StamenToner');
+  private _baseLayerName$ = new BehaviorSubject<string>('OSMStandard');
   get baseLayerName$(): Observable<string> {
     return this._baseLayerName$.asObservable();
   }
@@ -120,12 +120,13 @@ export class MapService {
 
     tripDurationInMs =
       +sortedTripSteps[sortedTripSteps.length - 1].date - +trip.startDate;
-    const stepsFeatures = stepsCoordinates.map(
-      (coordinates) =>
-        new Feature({
-          geometry: new Point(olProj.fromLonLat(coordinates)),
-        })
-    );
+    const stepsFeatures = stepsCoordinates.map((coordinates, index) => {
+      const feature = new Feature({
+        geometry: new Point(olProj.fromLonLat(coordinates)),
+      });
+      feature.setId(index + 1);
+      return feature;
+    });
 
     const lineFeatures: Feature[] = [];
     [...stepsCoordinates]
@@ -155,23 +156,35 @@ export class MapService {
     trip: Trip,
     features: Feature[]
   ): BaseLayer {
+    const tripLines = this.tripLines;
     const tripLayer = new VectorLayer({
       source: new VectorSource({
         features: features,
       }),
-      style: new Style({
-        image: new Icon({
-          src: trip.color
-            ? `../../../../assets/pin-${trip.color}.png`
-            : '../../../../assets/pin-green.png',
-          anchor: [0.5, 1],
-        }),
-        stroke: new Stroke({
-          color: trip.color ? TripColor[trip.color] : 'green',
-          width: 4,
-          lineDash: this.tripLines,
-        }),
-      }),
+      style: function (feature: FeatureLike) {
+        const style = new Style({
+          image: new Icon({
+            src: trip.color
+              ? `../../../../assets/pin-${trip.color}.png`
+              : '../../../../assets/pin-green.png',
+            anchor: [0.5, 1],
+          }),
+          stroke: new Stroke({
+            color: trip.color ? TripColor[trip.color] : 'green',
+            width: 4,
+            lineDash: tripLines,
+          }),
+          text: new Text({
+            text: feature.getId()?.toString(),
+            font: '15px flix',
+            offsetY: -30,
+            fill: new Fill({
+              color: trip.color ? TripColor[trip.color] : 'green',
+            }),
+          }),
+        });
+        return style;
+      },
     });
     return tripLayer;
   }
@@ -211,17 +224,6 @@ export class MapService {
       ),
     });
     this.source.addFeature(feature);
-    const pinLayer = new VectorLayer({
-      source: this.source,
-      style: new Style({
-        image: new Icon({
-          src: tripColor
-            ? `../../../../assets/pin-${tripColor}.png`
-            : '../../../../assets/pin-green.png',
-          anchor: [0.5, 1],
-        }),
-      }),
-    });
   }
 
   defineCenterOfMap(coordinates: Coordinates, zoom: number = 4) {
