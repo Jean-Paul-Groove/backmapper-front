@@ -345,9 +345,12 @@ export class TripService {
   ): Step {
     const trip = this.getOneTripByIdAsGuest(tripId);
     const newId =
-      trip.steps.map((step) => step.id).sort((a, b) => a - b)[
-        this.dummyTrips.length - 1
-      ] + 1;
+      trip.steps.length < 1
+        ? 1
+        : trip.steps.map((step) => step.id).sort((a, b) => a - b)[
+            trip.steps.length - 1
+          ] + 1;
+    console.log('le nouvel id est ' + newId);
     const newStep = {
       ...stepContent,
       id: newId,
@@ -381,6 +384,8 @@ export class TripService {
     tripId: number
   ): Step {
     const trip = this.getOneTripByIdAsGuest(tripId);
+    console.log(trip);
+    console.log('Le stepID est ' + stepId);
     const stepToUpdate = trip.steps.filter((step) => step.id === stepId)[0];
     if (
       stepContent.picturesToDelete &&
