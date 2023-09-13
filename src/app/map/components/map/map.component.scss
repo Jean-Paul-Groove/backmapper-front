@@ -29,6 +29,17 @@
   border-bottom: 1px rgba(178, 178, 178, 0.618) solid;
   cursor: pointer;
 }
+#popup {
+  padding: 0.5vw;
+  max-width: 30vw;
+  max-height: 20vh;
+  background-color: white;
+  border-radius: 10vw;
+  border-top-left-radius: 0;
+  box-shadow: 0 0 3px black;
+  font-family: "work sans";
+  font-weight: bolder;
+}
 @media screen and (max-width: 650px) {
   .layer-picker {
     right: 0;

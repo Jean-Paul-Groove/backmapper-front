@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { LoginDto } from '../../auth/dto/login.dto';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { TokenInfoDto } from 'src/app/auth/dto/token-info.dto';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { NotificationService } from './notification.service';
 

@@ -8,7 +8,7 @@ import {
   HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 import { CreateTripDto } from 'src/app/travel-log/dto/create-trip.dto';
 import { AuthService } from './auth.service';
 import { NotificationService } from './notification.service';

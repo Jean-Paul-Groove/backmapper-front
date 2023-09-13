@@ -12,7 +12,7 @@ import { Step } from 'src/app/shared/models/step.model';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { MapService } from 'src/app/shared/services/map.service';
 import { TripService } from 'src/app/shared/services/trip.service';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-update-step',

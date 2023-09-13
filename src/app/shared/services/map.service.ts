@@ -5,7 +5,7 @@ import OSM from 'ol/source/OSM';
 import XYZ from 'ol/source/XYZ';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Trip } from '../models/trip.model';
-import { Feature } from 'ol';
+import { Feature, Overlay, View } from 'ol';
 import { LineString, Point } from 'ol/geom';
 import * as olProj from 'ol/proj';
 import VectorLayer from 'ol/layer/Vector';
@@ -17,6 +17,10 @@ import { TripService } from './trip.service';
 import { Step } from '../models/step.model';
 import { Fill, Stroke, Style, Text } from 'ol/style';
 import { FeatureLike } from 'ol/Feature';
+import { click } from 'ol/events/condition';
+import { Select } from 'ol/interaction';
+import Map from 'ol/Map';
+import { defaults } from 'ol/control/defaults';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +62,19 @@ export class MapService {
   };
   private mapIsAlreadyCentering = false;
 
+  map = new Map({
+    layers: [],
+    view: new View({
+      center: olProj.fromLonLat(this.defaultView.center),
+      zoom: 2,
+    }),
+    controls: defaults({ rotate: false }),
+  });
+
+  popupOverlay = new Overlay({
+    offset: [5, 10],
+    className: 'popupoverlay',
+  });
   //Déclaration des béhaviour subjects pour le reactive state management
   private _baseLayer$ = new BehaviorSubject<BaseLayer>(
     this.provideLayer('OSMStandard')
@@ -120,11 +137,20 @@ export class MapService {
 
     tripDurationInMs =
       +sortedTripSteps[sortedTripSteps.length - 1].date - +trip.startDate;
-    const stepsFeatures = stepsCoordinates.map((coordinates, index) => {
+    const stepsFeatures = sortedTripSteps.map((step, index) => {
+      const featureCoordinates = olProj.fromLonLat(
+        this.tripService.transformCoordinateStringToArrayOfNumber(
+          step.coordinates
+        )
+      );
       const feature = new Feature({
-        geometry: new Point(olProj.fromLonLat(coordinates)),
+        geometry: new Point(featureCoordinates),
+        name: step.title,
+        stepNumber: index + 1,
+        id: 'step' + step.id,
+        tripColor: trip.color ? TripColor[trip.color] : 'green',
+        stepCoordinates: featureCoordinates,
       });
-      feature.setId(index + 1);
       return feature;
     });
 
@@ -139,7 +165,6 @@ export class MapService {
         tripDistance = tripDistance + line.getLength();
         const feature = new Feature({
           geometry: line,
-          name: 'Line',
         });
         lineFeatures.push(feature);
         return currentValue;
@@ -163,6 +188,14 @@ export class MapService {
       }),
       style: function (feature: FeatureLike) {
         const style = new Style({
+          text: new Text({
+            text: feature.getProperties()['stepNumber']?.toString(),
+            font: '15px flix',
+            offsetY: -30,
+            fill: new Fill({
+              color: trip.color ? TripColor[trip.color] : 'green',
+            }),
+          }),
           image: new Icon({
             src: trip.color
               ? `../../../../assets/pin-${trip.color}.png`
@@ -173,14 +206,6 @@ export class MapService {
             color: trip.color ? TripColor[trip.color] : 'green',
             width: 4,
             lineDash: tripLines,
-          }),
-          text: new Text({
-            text: feature.getId()?.toString(),
-            font: '15px flix',
-            offsetY: -30,
-            fill: new Fill({
-              color: trip.color ? TripColor[trip.color] : 'green',
-            }),
           }),
         });
         return style;
@@ -281,5 +306,12 @@ export class MapService {
     this._newPinCoordinates$.next(undefined);
     this.stopDrowOnMap();
     this.source = new VectorSource();
+  }
+  hidePopUpOverlay() {
+    this.popupOverlay.setPosition(undefined);
+    const listeners = this.map.getListeners('click');
+    listeners?.forEach((listener) =>
+      this.map.removeEventListener('click', listener)
+    );
   }
 }

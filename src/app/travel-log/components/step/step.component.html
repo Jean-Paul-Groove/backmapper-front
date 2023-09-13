@@ -2,6 +2,7 @@
   @stepItem
   *ngIf="step"
   class="travel-step"
+  [id]="'step' + step.id"
   (click)="onClick()"
   [ngStyle]="{ 'background-color': tripColor }"
 >

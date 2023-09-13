@@ -9,6 +9,7 @@ import { Coordinates } from 'src/app/shared/models/coordinates.model';
 import { Draw } from 'ol/interaction.js';
 import { Point } from 'ol/geom';
 import { defaults } from 'ol/control/defaults';
+import Overlay from 'ol/Overlay';
 
 @Component({
   selector: 'app-map',
@@ -26,6 +27,9 @@ export class MapComponent implements OnInit {
   mapWidthInPx!: number;
   mapRightPadding!: number;
   layerPickerOpen!: boolean;
+  layerFilterForPopUp: undefined | BaseLayer;
+  popup!: HTMLAnchorElement;
+  popupOverlay!: Overlay;
 
   constructor(public mapService: MapService) {}
 
@@ -58,27 +62,29 @@ export class MapComponent implements OnInit {
   }
 
   private initializeMap() {
-    const defaultView = this.mapService.defaultView;
-    this.map = new Map({
-      target: 'map-root',
-      layers: [],
-      view: new View({
-        center: olProj.fromLonLat(defaultView.center),
-        zoom: 2,
-        padding: [0, this.mapRightPadding, 0, 0],
-      }),
-      controls: defaults({ rotate: false }),
-    });
+    this.map = this.mapService.map;
+    this.map.setTarget('map-root');
+    this.map.getView().padding = [0, this.mapRightPadding, 0, 0];
+    this.popup = document.getElementById('popup') as HTMLAnchorElement;
+    this.popupOverlay = this.mapService.popupOverlay;
+    this.popupOverlay.setElement(this.popup);
   }
 
   private combineLayers() {
     combineLatest([this.baseLayer$, this.tripLayers$, this.drawingForTrip$])
       .pipe(
-        map(([baseLayer, tripLayer, drawingForTrip]) =>
-          drawingForTrip
+        map(([baseLayer, tripLayer, drawingForTrip]) => {
+          this.mapService.hidePopUpOverlay();
+          if (tripLayer.length === 1) {
+            this.layerFilterForPopUp = tripLayer[0];
+            this.displayPopup();
+          } else {
+            this.layerFilterForPopUp = undefined;
+          }
+          return drawingForTrip
             ? [baseLayer, ...tripLayer, drawingForTrip]
-            : [baseLayer, ...tripLayer]
-        ),
+            : [baseLayer, ...tripLayer];
+        }),
         tap((layers) => {
           this.map.setLayers(layers);
         })
@@ -138,5 +144,38 @@ export class MapComponent implements OnInit {
   }
   onOpenLayerPicker() {
     this.layerPickerOpen = true;
+  }
+  private displayPopup() {
+    console.log('triggered');
+    const map = this.map;
+    const layerFilterForPopUp = this.layerFilterForPopUp;
+    const popup = this.popup;
+    popup.hidden = false;
+    const popupOverlay = this.popupOverlay;
+    map.addOverlay(this.popupOverlay);
+    map.on('click', function overlaySetter(evt) {
+      const features = map.getFeaturesAtPixel(evt.pixel, {
+        layerFilter: function (layerCandidate) {
+          if (layerFilterForPopUp == layerCandidate) {
+            return true;
+          }
+          return false;
+        },
+      });
+      features.filter((feature) => feature.getProperties()['name']);
+      if (features.length > 0) {
+        const featureProperties = features[0].getProperties();
+        document
+          .getElementById(featureProperties['id'])
+          ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        popup.innerHTML = featureProperties['name'];
+        popup.style.color = featureProperties['tripColor'];
+        const coordinates = featureProperties['stepCoordinates'];
+        popupOverlay.setPosition(coordinates);
+      } else {
+        popup.innerHTML = '';
+        popupOverlay.setPosition(undefined);
+      }
+    });
   }
 }

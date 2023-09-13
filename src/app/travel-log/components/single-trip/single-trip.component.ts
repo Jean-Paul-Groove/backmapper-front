@@ -53,6 +53,7 @@ export class SingleTripComponent implements OnInit {
     this.tripId = +this.route.snapshot.params['id'];
     this.initializeTrip();
   }
+
   private initializeTrip() {
     this.trip$ = this.tripsService.getOneTripById(this.tripId).pipe(
       map((trip) => {

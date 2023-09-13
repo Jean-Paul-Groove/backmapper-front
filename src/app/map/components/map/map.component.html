@@ -10,6 +10,7 @@
     (layerSelected)="layerPickerOpen = false"
     *ngIf="layerPickerOpen"
   ></app-layer-picker>
+  <a id="popup" hidden="true"></a>
   <div class="loader-container" *ngIf="mapService.loading$ | async">
     <app-loader-svg color="white"></app-loader-svg>
   </div>
