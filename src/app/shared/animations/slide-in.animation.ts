@@ -1,4 +1,4 @@
-import { animate, animation, sequence, style } from '@angular/animations';
+import { animate, animation, style } from '@angular/animations';
 
 export const slideInAnimation = animation([
   style({

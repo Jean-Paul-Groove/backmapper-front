@@ -71,6 +71,9 @@ h2 {
   & button {
     display: none;
   }
+  & ul {
+    list-style: none;
+  }
 }
 @media screen and (max-width: 650px) {
   .ol-attribution {

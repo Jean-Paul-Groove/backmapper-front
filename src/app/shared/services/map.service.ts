@@ -17,8 +17,6 @@ import { TripService } from './trip.service';
 import { Step } from '../models/step.model';
 import { Fill, Stroke, Style, Text } from 'ol/style';
 import { FeatureLike } from 'ol/Feature';
-import { click } from 'ol/events/condition';
-import { Select } from 'ol/interaction';
 import Map from 'ol/Map';
 import { defaults } from 'ol/control/defaults';
 
@@ -36,22 +34,12 @@ export class MapService {
   baseLayersDictionary = [
     { name: 'OSMStandard', value: new TileLayer({ source: new OSM() }) },
     {
-      name: 'StamenTerrain',
+      name: 'Humanitarian',
       value: new TileLayer({
         source: new XYZ({
-          url: 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg',
+          url: 'https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
           attributions:
-            'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
-        }),
-      }),
-    },
-    {
-      name: 'StamenToner',
-      value: new TileLayer({
-        source: new XYZ({
-          url: 'http://tile.stamen.com/toner/{z}/{x}/{y}.jpg',
-          attributions:
-            'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+            '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap Contributors.</a> Tile style by <a href="https://www.hotosm.org/">Humanitarian OpenStreetMap Team</a>',
         }),
       }),
     },
@@ -256,10 +244,12 @@ export class MapService {
       return;
     }
     const actualView = this._view$.getValue();
+    const currentZoom = this.map.getView().getZoom();
     if (
       actualView.center[0] === coordinates[0] &&
       actualView.center[1] === coordinates[1] &&
-      actualView.zoom == zoom
+      currentZoom &&
+      currentZoom >= zoom
     ) {
       return;
     } else {
@@ -272,8 +262,10 @@ export class MapService {
           step.style.cursor = 'pointer';
         }
       }, this.mapAnimationDuration * 2);
-
-      this._view$.next({ center: coordinates, zoom: zoom });
+      this._view$.next({
+        center: coordinates,
+        zoom: currentZoom && currentZoom > zoom ? currentZoom : zoom,
+      });
       this.mapIsAlreadyCentering = true;
       for (const step of steps) {
         step.style.cursor = 'wait';

@@ -7,12 +7,19 @@
   height: 90%;
   width: 90%;
   border: 1px rgba(178, 178, 178, 0.618) solid;
+  --vert: #90c43c;
+  --bleu: #00b9ff;
+  --azur: #00d3be;
+  --violet: #c2a2ff;
+  --rose: #ff86f3;
+  --rouge: #ff6970;
+  --jaune: #fab143;
 }
 
 h1 {
   width: 100%;
   text-align: left;
-  color: rgb(229, 229, 229);
+  text-shadow: 0px 0px 3px rgb(229, 229, 229);
   background-color: rgba(0, 0, 0, 0.792);
   backdrop-filter: blur(10px);
   font-family: "flix outline";
@@ -23,6 +30,27 @@ h1 {
   border: 1px rgba(178, 178, 178, 0.618) solid;
   z-index: 2;
   letter-spacing: 0.5rem;
+}
+h1 span:nth-of-type(7n + 1) {
+  color: var(--violet);
+}
+h1 span:nth-of-type(7n + 2) {
+  color: var(--bleu);
+}
+h1 span:nth-of-type(7n + 3) {
+  color: var(--azur);
+}
+h1 span:nth-of-type(7n + 4) {
+  color: var(--rose);
+}
+h1 span:nth-of-type(7n + 5) {
+  color: var(--rouge);
+}
+h1 span:nth-of-type(7n + 6) {
+  color: var(--jaune);
+}
+h1 span:nth-of-type(7n + 7) {
+  color: var(--vert);
 }
 .map-container {
   overflow: hidden;
