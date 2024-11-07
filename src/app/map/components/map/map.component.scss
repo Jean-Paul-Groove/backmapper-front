@@ -14,13 +14,11 @@
   position: absolute;
   backdrop-filter: blur(10px);
   border-right: none;
-  right: 30%;
-  top: 60%;
-  width: 3.5vw;
-  border-radius: 0.5vw;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  padding: 0.5vw;
+  left: 20px;
+  top:  70px;
+  width: 35px;
+  border-radius: 8px;
+  padding: 8px;
   z-index: 2;
   background-color: rgba(0, 0, 0, 0.659);
   backdrop-filter: blur(10px);
@@ -42,6 +40,6 @@
 }
 @media screen and (max-width: 650px) {
   .layer-picker {
-    right: 0;
+    left: 0;
   }
 }

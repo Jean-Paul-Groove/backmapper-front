@@ -1,12 +1,7 @@
 .app {
   overflow: hidden;
-  border-radius: 3vw;
   position: absolute;
-  left: 5%;
-  top: 5%;
-  height: 90%;
-  width: 90%;
-  border: 1px rgba(178, 178, 178, 0.618) solid;
+inset: 0;
   --vert: #90c43c;
   --bleu: #00b9ff;
   --azur: #00d3be;
@@ -27,6 +22,7 @@ h1 {
   padding: 0.5vw 3vw;
   position: absolute;
   top: 0;
+  left: 0;
   border: 1px rgba(178, 178, 178, 0.618) solid;
   z-index: 2;
   letter-spacing: 0.5rem;
@@ -54,8 +50,6 @@ h1 span:nth-of-type(7n + 7) {
 }
 .map-container {
   overflow: hidden;
-  border-radius: 1vw;
-  border: 1px rgba(178, 178, 178, 0.618) solid;
 }
 .wrapper {
   color: white;
@@ -64,14 +58,15 @@ h1 span:nth-of-type(7n + 7) {
   height: 100%;
   padding: 1vw;
   padding-top: 2vw;
-  border-radius: 0.5vw;
+  border-bottom-left-radius: 0.5vw;
+  border-top-left-radius: 0.8vw;
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 2;
   backdrop-filter: blur(15px);
   position: absolute;
   right: 0;
-  width: 30%;
+  width: 20%;
   border-left: 1px rgba(178, 178, 178, 0.618) solid;
   transition: all ease-in-out 200ms;
 }

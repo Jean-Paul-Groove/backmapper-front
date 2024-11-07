@@ -15,8 +15,6 @@
 body {
   height: 100vh;
   width: 100vw;
-  background: url("./assets/pexels-stefan-stefancik-91228.webp");
-  background-size: cover;
 }
 h2 {
   font-family: "flix";
@@ -24,13 +22,11 @@ h2 {
 //Le style des éléments de la carte ne peut pas être injecté dans le composant map car ils sont créés par OpenLayers en dehors du composant
 .ol-zoom {
   position: absolute;
-  right: 30%;
-  top: 45%;
-  height: 12%;
-  padding: 0.8vw;
-  border-radius: 0.5vw;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  left: 20px;
+  top: 115px;
+  height: 80px;
+  padding: 4px 7px;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -42,9 +38,9 @@ h2 {
   button {
     color: white;
     border: none;
-    background-color: black;
-    padding: 0.25vw;
-    border-radius: 0.5vw;
+    background-color: var(--jaune);
+    padding: 6px;
+    border-radius: 8px;
     cursor: pointer;
     &:hover {
       box-shadow: 0 0 1px white;
@@ -59,7 +55,7 @@ h2 {
   font-family: "work sans";
   font-weight: 500;
   left: 0;
-  width: 71%;
+  width: 100%;
   background-color: rgba(0, 0, 0, 0.718);
   padding-left: 1vw;
   padding-bottom: 1vw;
@@ -80,7 +76,7 @@ h2 {
     width: 100%;
   }
   .ol-zoom {
-    right: 0;
+    left:0 ;
     height: fit-content;
   }
 }
