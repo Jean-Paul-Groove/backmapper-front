@@ -20,12 +20,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-      - name: install dependencies 
-        run: |
-        npm install 
+      - name: install dependencies
+        run: npm install
       - name: build front
-        run: |
-        npm run build
+        run: npm run build
       - name: login
         run: |
           echo ${{ secrets.GH_SECRET }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
